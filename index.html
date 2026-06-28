@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Flickering City</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header id="hero">
+
+    <h1>The Flickering Planet</h1>
+
+    <p class="subtitle">
+        How NASA's Black Marble reveals the changing rhythm of cities after dark
+    </p>
+
+    <p class="intro">
+        Every night, satellites record the artificial light emitted from Earth's surface. NASA's Black Marble dataset combines these observations into monthly maps of nighttime illumination, providing a consistent record of urban lighting over time. Explore twelve years of observations from Berlin and Kyiv to discover how seasons, technology and major events have shaped the urban night.
+    </p>
+
+</header>
+
+<main>
+
+    <section class="city-section">
+
+        <h2 class="city-title">Berlin</h2>
+
+        <p class="city-subtitle">The changing rhythm of a growing European capital</p>
+
+        <section id="mapContainer">
+
+            <div id="overlay">
+
+                <div class="source">
+                    NASA BLACK MARBLE
+                </div>
+
+                <h2 id="mapDate">
+                    January 2014
+                </h2>
+
+                <div id="radiance">
+                    14.72 nW/cm²/sr
+                </div>
+
+                <p id="storyText">
+                    Move through the timeline below to explore Berlin's changing nighttime landscape.
+                </p>
+
+            </div>
+
+            <div id="map"></div>
+
+        </section>
+
+        <section id="timeline">
+
+            <svg id="chart"></svg>
+
+        </section>
+
+    </section>
+
+    <section class="city-section">
+
+        <h2 class="city-title">Kyiv</h2>
+
+        <p class="city-subtitle">Night lights before, during and after the energy crisis</p>
+
+        <section id="mapContainerKyiv">
+
+            <div id="overlayKyiv">
+
+                <div class="source">
+                    NASA BLACK MARBLE
+                </div>
+
+                <h2 id="mapDateKyiv">
+                    January 2014
+                </h2>
+
+                <div id="radianceKyiv">
+                    11.57 nW/cm²/sr
+                </div>
+
+                <p id="storyTextKyiv">
+                    Move through the timeline below to explore Kyiv's changing nighttime landscape.
+                </p>
+
+            </div>
+
+            <div id="mapKyiv"></div>
+
+        </section>
+
+        <section id="timelineKyiv">
+
+            <svg id="chartKyiv"></svg>
+
+        </section>
+
+    </section>
+
+</main>
+
+<script src="js/map.js"></script>
+<script src="js/graph.js"></script>
+<script src="js/story.js"></script>
+
+</body>
+
+</html>

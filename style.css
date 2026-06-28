@@ -1,0 +1,435 @@
+/* ==========================================================
+   THE FLICKERING CITY
+   ========================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    background:#05070d;
+    color:white;
+
+    font-family:Inter,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    letter-spacing:0.01em;
+
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+#hero{
+
+    width:min(850px,92vw);
+
+    margin:56px auto 54px;
+
+    text-align:center;
+
+}
+
+h1{
+
+    font-size:clamp(2.4rem,4.4vw,3.8rem);
+
+    font-weight:700;
+
+    letter-spacing:-0.035em;
+
+    line-height:1.02;
+
+    margin-bottom:16px;
+
+}
+
+.subtitle{
+
+    font-size:1.02rem;
+
+    color:#8eb4ff;
+
+    max-width:760px;
+
+    margin:0 auto 16px;
+
+    line-height:1.6;
+
+}
+
+.intro{
+
+    max-width:760px;
+
+    color:#c0c7d0;
+
+    font-size:1rem;
+
+    line-height:1.8;
+
+    margin:0 auto;
+
+}
+
+/* ==========================================================
+   MAIN
+   ========================================================== */
+
+main{
+
+    width:min(1500px,92vw);
+
+    margin:auto;
+
+}
+
+.city-title{
+
+    text-align:center;
+
+    font-size:1.7rem;
+
+    font-weight:700;
+
+    margin:0 0 8px;
+
+    color:#f2f6ff;
+
+    letter-spacing:-0.02em;
+
+}
+
+.city-subtitle{
+
+    text-align:center;
+
+    font-size:0.95rem;
+
+    color:#8a95a7;
+
+    margin:0 0 20px;
+
+    line-height:1.6;
+
+}
+
+/* ==========================================================
+   MAP
+   ========================================================== */
+
+.city-section{
+
+    position:relative;
+
+    margin:0 auto 64px;
+
+    padding-bottom:116px;
+
+    max-width:1100px;
+
+}
+
+#mapContainer,
+#mapContainerKyiv{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+}
+
+#map,
+#mapKyiv{
+
+    width:100%;
+
+    height:580px;
+
+    background:transparent;
+
+    border-radius:20px;
+
+}
+
+.leaflet-container{
+
+    background:#000;
+
+}
+
+.leaflet-control-container{
+
+    display:block;
+
+}
+
+.leaflet-control-zoom{
+
+    border:none;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.22);
+
+    margin:14px 14px 0 0;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+}
+
+.leaflet-control-zoom a{
+
+    background:rgba(11,15,24,.92);
+
+    color:#fff;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    transition:background .2s ease;
+
+}
+
+.leaflet-control-zoom a:hover{
+
+    background:rgba(18,24,36,.98);
+
+}
+
+/* ==========================================================
+   TEXT OVERLAY
+   ========================================================== */
+
+#overlay,
+#overlayKyiv{
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:min(390px,86%);
+    height:100%;
+
+    z-index:1000;
+
+    padding:40px 42px 32px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-start;
+
+    background:linear-gradient(
+
+        90deg,
+
+        rgba(4,8,16,.48) 0%,
+
+        rgba(4,8,16,.26) 42%,
+
+        rgba(4,8,16,.08) 76%,
+
+        rgba(4,8,16,0) 100%
+
+    );
+
+    backdrop-filter:blur(1px);
+
+}
+
+.source{
+
+    font-size:0.72rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:0.2em;
+
+    color:#7e899c;
+
+    margin-bottom:16px;
+
+}
+
+#mapDate,
+#mapDateKyiv{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    line-height:1.15;
+
+    margin-bottom:8px;
+
+    letter-spacing:-0.02em;
+
+}
+
+#radiance,
+#radianceKyiv{
+
+    color:#8eb4ff;
+
+    font-size:1.05rem;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+#storyText,
+#storyTextKyiv{
+
+    width:min(280px,100%);
+
+    font-size:0.96rem;
+
+    line-height:1.65;
+
+    color:#d7dde6;
+
+}
+
+/* ==========================================================
+   TIMELINE
+   ========================================================== */
+
+#timeline,
+#timelineKyiv{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:14px;
+
+    z-index:1100;
+
+    pointer-events:auto;
+
+    padding:0 16px 0;
+
+    overflow:visible;
+
+}
+
+#chart,
+#chartKyiv{
+
+    width:100%;
+
+    height:128px;
+
+    cursor:pointer;
+
+    display:block;
+
+    background:transparent;
+
+    border-radius:12px;
+
+    padding:8px 10px 16px;
+
+    filter:drop-shadow(0 0 0 rgba(0,0,0,0));
+
+}
+
+/* ==========================================================
+   BLACK MARBLE IMAGE
+   ========================================================== */
+
+.leaflet-image-layer{
+    filter:
+        brightness(1.06)
+        contrast(1.1);
+
+    opacity:0.98;
+    transition:opacity 420ms ease;
+
+    -webkit-mask-image:linear-gradient(
+        to bottom right,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,1) 86%,
+        rgba(0,0,0,0) 100%
+    );
+    mask-image:linear-gradient(
+        to bottom right,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,1) 86%,
+        rgba(0,0,0,0) 100%
+    );
+    -webkit-mask-size:100% 100%;
+    mask-size:100% 100%;
+
+}
+.leaflet-tile{
+    filter:
+        brightness(.74)
+        contrast(1.04)
+        saturate(0.48);
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media(max-width:900px){
+
+    #hero{
+
+        margin:42px auto 38px;
+
+    }
+
+    #overlay,
+    #overlayKyiv{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+        padding:35px;
+
+        background:#05070d;
+
+    }
+
+    #storyText,
+    #storyTextKyiv{
+
+        width:100%;
+
+    }
+
+    #map,
+    #mapKyiv{
+
+        height:500px;
+
+    }
+
+    h1{
+
+        font-size:40px;
+
+    }
+
+}
