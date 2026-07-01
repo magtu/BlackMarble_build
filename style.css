@@ -170,7 +170,8 @@ main{
 }
 
 #mapContainer,
-#mapContainerKyiv{
+#mapContainerKyiv,
+#mapContainerIndia{
 
     position:relative;
 
@@ -180,20 +181,9 @@ main{
 
 }
 
-#mapContainerIndia{
-
-    position:relative;
-
-    width:100%;
-
-    padding-bottom:70%;
-
-    overflow:hidden;
-
-}
-
 #map,
-#mapKyiv{
+#mapKyiv,
+#mapIndia{
 
     width:100%;
 
@@ -205,19 +195,96 @@ main{
 
 }
 
-#mapContainerIndia iframe{
+/* ==========================================================
+   INDIA SLIDER
+   ========================================================== */
 
-    position:absolute;
+#indiaSliderRow{
 
-    top:0;
-    left:0;
+    display:flex;
 
-    display:block;
+    align-items:center;
 
-    width:100%;
-    height:100%;
+    justify-content:center;
 
-    border:none;
+    gap:16px;
+
+    max-width:640px;
+
+    margin:20px auto 0;
+
+}
+
+#indiaSliderLabelLeft,
+#indiaSliderLabelRight{
+
+    font-size:0.72rem;
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:0.14em;
+
+    color:#8a95a7;
+
+    white-space:nowrap;
+
+}
+
+#indiaSlider{
+
+    flex:1;
+
+    -webkit-appearance:none;
+    appearance:none;
+
+    height:4px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.16);
+
+    accent-color:#8eb4ff;
+
+    cursor:pointer;
+
+}
+
+#indiaSlider::-webkit-slider-thumb{
+
+    -webkit-appearance:none;
+    appearance:none;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:#8eb4ff;
+
+    border:2px solid white;
+
+    box-shadow:0 0 10px rgba(142,180,255,.5);
+
+    cursor:pointer;
+
+}
+
+#indiaSlider::-moz-range-thumb{
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:#8eb4ff;
+
+    border:2px solid white;
+
+    box-shadow:0 0 10px rgba(142,180,255,.5);
+
+    cursor:pointer;
 
 }
 
@@ -539,7 +606,8 @@ main{
     }
 
     #map,
-    #mapKyiv{
+    #mapKyiv,
+    #mapIndia{
 
         height:500px;
 

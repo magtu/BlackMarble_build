@@ -375,3 +375,96 @@ function updateKyivMonth(index){
     }
 
 }
+
+// ---------- India map ----------
+
+const indiaMap = L.map("mapIndia", {
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false
+});
+
+L.control.zoom({ position: "topright" }).addTo(indiaMap);
+
+L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    {
+        maxZoom:18,
+        pane: "tilePane"
+    }
+).addTo(indiaMap);
+
+const indiaBoundaryPane = indiaMap.createPane("boundaryPane");
+indiaBoundaryPane.style.zIndex = 450;
+indiaBoundaryPane.style.pointerEvents = "none";
+
+const indiaBounds = L.latLngBounds([
+
+    [6,68],
+    [37,97]
+
+]);
+
+let indiaOverlay2016 = L.imageOverlay(
+    "images/India/India_2016.png",
+    indiaBounds,
+    {
+        opacity:0.9
+    }
+).addTo(indiaMap);
+
+let indiaOverlay2025 = L.imageOverlay(
+    "images/India/India_2025.png",
+    indiaBounds,
+    {
+        opacity:0.9
+    }
+).addTo(indiaMap);
+
+indiaOverlay2016.once("load", function () {
+
+    indiaOverlay2016.getElement().style.mixBlendMode = "normal";
+
+});
+
+indiaOverlay2025.once("load", function () {
+
+    indiaOverlay2025.getElement().style.mixBlendMode = "normal";
+
+});
+
+indiaMap.fitBounds(indiaBounds);
+
+addCityBoundary(indiaMap, "data/India_boundaries.geojson", indiaOverlay2016, indiaBounds).then(() => {
+
+    indiaOverlay2025.setBounds(indiaOverlay2016.getBounds());
+
+});
+
+// ---------- India slider ----------
+
+const indiaSlider = document.getElementById("indiaSlider");
+
+function updateIndiaSlider(value){
+
+    const clipRight = 100 - value;
+
+    if(indiaOverlay2025.getElement()){
+
+        indiaOverlay2025.getElement().style.clipPath = `inset(0 ${clipRight}% 0 0)`;
+
+    }
+
+}
+
+if(indiaSlider){
+
+    indiaSlider.addEventListener("input", function () {
+
+        updateIndiaSlider(Number(indiaSlider.value));
+
+    });
+
+    updateIndiaSlider(Number(indiaSlider.value));
+
+}
