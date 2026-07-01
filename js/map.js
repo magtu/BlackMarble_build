@@ -24,7 +24,7 @@ const boundaryPane = map.createPane("boundaryPane");
 boundaryPane.style.zIndex = 450;
 boundaryPane.style.pointerEvents = "none";
 
-function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbackBounds){
+function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbackBounds, drawBoundary = true){
 
     return fetch(geojsonPath)
         .then(response => response.json())
@@ -41,7 +41,9 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
                 }
             });
 
-            boundaryLayer.addTo(mapInstance);
+            if(drawBoundary){
+                boundaryLayer.addTo(mapInstance);
+            }
 
             const boundaryBounds = boundaryLayer.getBounds();
 
@@ -400,8 +402,8 @@ indiaBoundaryPane.style.pointerEvents = "none";
 
 const indiaBounds = L.latLngBounds([
 
-    [6,68],
-    [37,97]
+    [6.755997359521655,68.17821481235681],
+    [33.17193942860955,97.16705813917069]
 
 ]);
 
@@ -435,9 +437,10 @@ indiaOverlay2025.once("load", function () {
 
 indiaMap.fitBounds(indiaBounds);
 
-addCityBoundary(indiaMap, "data/India_boundaries.geojson", indiaOverlay2016, indiaBounds).then(() => {
+addCityBoundary(indiaMap, "data/India_boundaries.geojson", null, indiaBounds, false).then(() => {
 
-    indiaOverlay2025.setBounds(indiaOverlay2016.getBounds());
+    indiaOverlay2016.setBounds(indiaBounds);
+    indiaOverlay2025.setBounds(indiaBounds);
 
 });
 
