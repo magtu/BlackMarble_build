@@ -32,7 +32,7 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
 
             const boundaryLayer = L.geoJSON(data, {
                 pane: "boundaryPane",
-                filter: feature => feature.geometry && feature.geometry.type !== "Point",
+                filter: feature => feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon"),
                 style: {
                     color: "#cfe4ff",
                     weight: 1,
@@ -402,8 +402,8 @@ indiaBoundaryPane.style.pointerEvents = "none";
 
 const indiaBounds = L.latLngBounds([
 
-    [6.755997359521655,68.17821481235681],
-    [33.17193942860955,97.16705813917069]
+    [6.756296109978467,68.1793251401011],
+    [33.1708291236821,97.1670581391707]
 
 ]);
 
@@ -411,7 +411,7 @@ let indiaOverlay2016 = L.imageOverlay(
     "images/India/India_2016.png",
     indiaBounds,
     {
-        opacity:0.9
+        opacity:1
     }
 ).addTo(indiaMap);
 
@@ -419,25 +419,29 @@ let indiaOverlay2025 = L.imageOverlay(
     "images/India/India_2025.png",
     indiaBounds,
     {
-        opacity:0.9
+        opacity:1
     }
 ).addTo(indiaMap);
 
 indiaOverlay2016.once("load", function () {
 
     indiaOverlay2016.getElement().style.mixBlendMode = "normal";
+    indiaOverlay2016.getElement().style.maskImage = "none";
+    indiaOverlay2016.getElement().style.webkitMaskImage = "none";
 
 });
 
 indiaOverlay2025.once("load", function () {
 
     indiaOverlay2025.getElement().style.mixBlendMode = "normal";
+    indiaOverlay2025.getElement().style.maskImage = "none";
+    indiaOverlay2025.getElement().style.webkitMaskImage = "none";
 
 });
 
 indiaMap.fitBounds(indiaBounds);
 
-addCityBoundary(indiaMap, "data/India_boundaries.geojson", null, indiaBounds, false).then(() => {
+addCityBoundary(indiaMap, "data/India_boundary.geojson", null, indiaBounds, true).then(() => {
 
     indiaOverlay2016.setBounds(indiaBounds);
     indiaOverlay2025.setBounds(indiaBounds);
