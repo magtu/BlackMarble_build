@@ -207,13 +207,33 @@ main{
 
     z-index:900;
 
+    pointer-events:none;
+
+}
+
+#indiaDivider{
+
+    position:absolute;
+
+    top:0;
+    bottom:0;
+    left:50%;
+
+    width:44px;
+
+    transform:translateX(-50%);
+
     cursor:ew-resize;
+
+    pointer-events:auto;
 
     touch-action:none;
 
 }
 
-#indiaDivider{
+#indiaDivider::before{
+
+    content:"";
 
     position:absolute;
 
@@ -228,8 +248,6 @@ main{
     background:#8eb4ff;
 
     box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 0 18px rgba(0,0,0,.4);
-
-    pointer-events:none;
 
 }
 
@@ -274,7 +292,9 @@ main{
 
     position:absolute;
 
-    padding:8px 12px;
+    bottom:20px;
+
+    padding:10px 18px;
 
     border-radius:999px;
 
@@ -282,11 +302,11 @@ main{
 
     color:#fff;
 
-    font-size:0.72rem;
+    font-size:1.3rem;
 
     font-weight:700;
 
-    letter-spacing:0.16em;
+    letter-spacing:0.06em;
 
     text-transform:uppercase;
 
@@ -296,16 +316,17 @@ main{
 
 #indiaCompareLabelLeft{
 
-    top:20px;
-    left:20px;
+    left:32%;
+
+    transform:translateX(-50%);
 
 }
 
 #indiaCompareLabelRight{
 
-    /* clears the leaflet zoom control, which occupies the top-right corner */
-    top:90px;
-    right:20px;
+    right:32%;
+
+    transform:translateX(50%);
 
 }
 

@@ -468,57 +468,76 @@ addCityBoundary(indiaMap, "data/India_boundary.geojson", null, indiaBounds, true
 
 const indiaCompare = document.getElementById("indiaCompare");
 const indiaDivider = document.getElementById("indiaDivider");
+const indiaMapEl = document.getElementById("mapIndia");
 
-let indiaDividerPercent = 50;
+// The divider is pinned to a real longitude (not a fixed container %), so it
+// stays aligned with the image's clip boundary when the map is panned/zoomed.
+let indiaDividerLng = indiaBounds.getCenter().lng;
 
-function updateIndiaDivider(percent){
+function updateIndiaDividerDisplay(){
 
-    indiaDividerPercent = Math.max(0, Math.min(100, percent));
+    const mapRect = indiaMapEl.getBoundingClientRect();
+    const point = indiaMap.latLngToContainerPoint([indiaBounds.getCenter().lat, indiaDividerLng]);
+    const percent = (point.x / mapRect.width) * 100;
 
     if(indiaDivider){
 
-        indiaDivider.style.left = `${indiaDividerPercent}%`;
+        indiaDivider.style.left = `${percent}%`;
 
     }
 
-    if(indiaOverlay2025.getElement()){
+    const imgEl = indiaOverlay2025.getElement();
 
-        const clipRight = 100 - indiaDividerPercent;
+    if(imgEl){
 
-        indiaOverlay2025.getElement().style.clipPath = `inset(0 ${clipRight}% 0 0)`;
+        const imgRect = imgEl.getBoundingClientRect();
+        const imgOffsetX = imgRect.left - mapRect.left;
+        const imgPercent = ((point.x - imgOffsetX) / imgRect.width) * 100;
+        const clipLeft = Math.max(0, Math.min(100, imgPercent));
+
+        // Clip the LEFT side of the 2025 (top) layer so it only shows to the
+        // right of the divider, letting 2016 (bottom layer) show through on
+        // the left - matching the "2016" / "2025" label positions.
+        imgEl.style.clipPath = `inset(0 0 0 ${clipLeft}%)`;
 
     }
 
 }
 
-function indiaPercentFromEvent(event, rect){
+function updateIndiaDividerFromEvent(event){
 
-    return ((event.clientX - rect.left) / rect.width) * 100;
+    const mapRect = indiaMapEl.getBoundingClientRect();
+    const x = event.clientX - mapRect.left;
+    const latlng = indiaMap.containerPointToLatLng([x, mapRect.height / 2]);
+
+    indiaDividerLng = latlng.lng;
+
+    updateIndiaDividerDisplay();
 
 }
 
-if(indiaCompare){
+if(indiaDivider && indiaCompare){
 
-    indiaCompare.addEventListener("pointerdown", event => {
+    indiaDivider.addEventListener("pointerdown", event => {
 
         event.preventDefault();
-        indiaCompare.setPointerCapture(event.pointerId);
-        const rect = indiaCompare.getBoundingClientRect();
-        updateIndiaDivider(indiaPercentFromEvent(event, rect));
+        indiaDivider.setPointerCapture(event.pointerId);
+        updateIndiaDividerFromEvent(event);
 
     });
 
-    indiaCompare.addEventListener("pointermove", event => {
+    indiaDivider.addEventListener("pointermove", event => {
 
         if(event.buttons !== 1){
             return;
         }
 
-        const rect = indiaCompare.getBoundingClientRect();
-        updateIndiaDivider(indiaPercentFromEvent(event, rect));
+        updateIndiaDividerFromEvent(event);
 
     });
 
-    updateIndiaDivider(indiaDividerPercent);
+    indiaMap.on("move zoom", updateIndiaDividerDisplay);
+
+    updateIndiaDividerDisplay();
 
 }
