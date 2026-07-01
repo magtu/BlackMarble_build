@@ -196,10 +196,56 @@ main{
 }
 
 /* ==========================================================
-   INDIA SLIDER
+   INDIA COMPARE DIVIDER
    ========================================================== */
 
-#indiaSliderRow{
+#indiaCompare{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:900;
+
+    cursor:ew-resize;
+
+    touch-action:none;
+
+}
+
+#indiaDivider{
+
+    position:absolute;
+
+    top:0;
+    bottom:0;
+    left:50%;
+
+    width:2px;
+
+    transform:translateX(-50%);
+
+    background:#8eb4ff;
+
+    box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 0 18px rgba(0,0,0,.4);
+
+    pointer-events:none;
+
+}
+
+#indiaDividerHandle{
+
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
 
     display:flex;
 
@@ -207,84 +253,59 @@ main{
 
     justify-content:center;
 
-    gap:16px;
+    gap:2px;
 
-    max-width:640px;
+    background:rgba(11,15,24,.92);
 
-    margin:20px auto 0;
+    border:2px solid #8eb4ff;
 
-}
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
 
-#indiaSliderLabelLeft,
-#indiaSliderLabelRight{
+    color:#8eb4ff;
 
-    font-size:0.72rem;
+    font-size:0.7rem;
 
-    font-weight:600;
-
-    text-transform:uppercase;
-
-    letter-spacing:0.14em;
-
-    color:#8a95a7;
-
-    white-space:nowrap;
+    font-weight:700;
 
 }
 
-#indiaSlider{
+#indiaCompareLabelLeft,
+#indiaCompareLabelRight{
 
-    flex:1;
+    position:absolute;
 
-    -webkit-appearance:none;
-    appearance:none;
-
-    height:4px;
+    padding:8px 12px;
 
     border-radius:999px;
 
-    background:rgba(255,255,255,.16);
+    background:rgba(4,8,16,.78);
 
-    accent-color:#8eb4ff;
+    color:#fff;
 
-    cursor:pointer;
+    font-size:0.72rem;
 
-}
+    font-weight:700;
 
-#indiaSlider::-webkit-slider-thumb{
+    letter-spacing:0.16em;
 
-    -webkit-appearance:none;
-    appearance:none;
+    text-transform:uppercase;
 
-    width:18px;
-    height:18px;
-
-    border-radius:50%;
-
-    background:#8eb4ff;
-
-    border:2px solid white;
-
-    box-shadow:0 0 10px rgba(142,180,255,.5);
-
-    cursor:pointer;
+    pointer-events:none;
 
 }
 
-#indiaSlider::-moz-range-thumb{
+#indiaCompareLabelLeft{
 
-    width:18px;
-    height:18px;
+    top:20px;
+    left:20px;
 
-    border-radius:50%;
+}
 
-    background:#8eb4ff;
+#indiaCompareLabelRight{
 
-    border:2px solid white;
-
-    box-shadow:0 0 10px rgba(142,180,255,.5);
-
-    cursor:pointer;
+    /* clears the leaflet zoom control, which occupies the top-right corner */
+    top:90px;
+    right:20px;
 
 }
 

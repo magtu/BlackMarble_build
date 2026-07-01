@@ -24,15 +24,31 @@ const boundaryPane = map.createPane("boundaryPane");
 boundaryPane.style.zIndex = 450;
 boundaryPane.style.pointerEvents = "none";
 
+function stripPointGeometries(feature){
+
+    if(feature.geometry && feature.geometry.type === "GeometryCollection"){
+
+        feature.geometry.geometries = feature.geometry.geometries.filter(
+            geometry => geometry.type !== "Point" && geometry.type !== "MultiPoint"
+        );
+
+    }
+
+    return feature;
+
+}
+
 function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbackBounds, drawBoundary = true){
 
     return fetch(geojsonPath)
         .then(response => response.json())
         .then(data => {
 
+            data.features = data.features.map(stripPointGeometries);
+
             const boundaryLayer = L.geoJSON(data, {
                 pane: "boundaryPane",
-                filter: feature => feature.geometry && (feature.geometry.type === "Polygon" || feature.geometry.type === "MultiPolygon"),
+                filter: feature => feature.geometry && feature.geometry.type !== "Point" && feature.geometry.type !== "MultiPoint",
                 style: {
                     color: "#cfe4ff",
                     weight: 1,
@@ -448,15 +464,26 @@ addCityBoundary(indiaMap, "data/India_boundary.geojson", null, indiaBounds, true
 
 });
 
-// ---------- India slider ----------
+// ---------- India compare divider ----------
 
-const indiaSlider = document.getElementById("indiaSlider");
+const indiaCompare = document.getElementById("indiaCompare");
+const indiaDivider = document.getElementById("indiaDivider");
 
-function updateIndiaSlider(value){
+let indiaDividerPercent = 50;
 
-    const clipRight = 100 - value;
+function updateIndiaDivider(percent){
+
+    indiaDividerPercent = Math.max(0, Math.min(100, percent));
+
+    if(indiaDivider){
+
+        indiaDivider.style.left = `${indiaDividerPercent}%`;
+
+    }
 
     if(indiaOverlay2025.getElement()){
+
+        const clipRight = 100 - indiaDividerPercent;
 
         indiaOverlay2025.getElement().style.clipPath = `inset(0 ${clipRight}% 0 0)`;
 
@@ -464,14 +491,34 @@ function updateIndiaSlider(value){
 
 }
 
-if(indiaSlider){
+function indiaPercentFromEvent(event, rect){
 
-    indiaSlider.addEventListener("input", function () {
+    return ((event.clientX - rect.left) / rect.width) * 100;
 
-        updateIndiaSlider(Number(indiaSlider.value));
+}
+
+if(indiaCompare){
+
+    indiaCompare.addEventListener("pointerdown", event => {
+
+        event.preventDefault();
+        indiaCompare.setPointerCapture(event.pointerId);
+        const rect = indiaCompare.getBoundingClientRect();
+        updateIndiaDivider(indiaPercentFromEvent(event, rect));
 
     });
 
-    updateIndiaSlider(Number(indiaSlider.value));
+    indiaCompare.addEventListener("pointermove", event => {
+
+        if(event.buttons !== 1){
+            return;
+        }
+
+        const rect = indiaCompare.getBoundingClientRect();
+        updateIndiaDivider(indiaPercentFromEvent(event, rect));
+
+    });
+
+    updateIndiaDivider(indiaDividerPercent);
 
 }
