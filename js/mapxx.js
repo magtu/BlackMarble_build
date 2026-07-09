@@ -125,8 +125,8 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
 
 const bounds = L.latLngBounds([
 
-    [52.28,12.95],
-    [52.72,13.87]
+    [52.33,13.05],
+    [52.67,13.77]
 
 ]);
 
@@ -350,8 +350,8 @@ kyivBoundaryPane.style.pointerEvents = "none";
 
 const kyivBounds = L.latLngBounds([
 
-    [49.95,30.05],
-    [50.80,31.15]
+    [50.05,30.20],
+    [50.70,31.00]
 
 ]);
 
@@ -516,19 +516,10 @@ const detroitBoundaryPane = detroitMap.createPane("boundaryPane");
 detroitBoundaryPane.style.zIndex = 450;
 detroitBoundaryPane.style.pointerEvents = "none";
 
-// PNG bounds = Detroit city + 20km buffer (matches GEE export region)
 const detroitBounds = L.latLngBounds([
 
-    [42.075, -83.470],
-    [42.630, -82.730]
-
-]);
-
-// View bounds - slightly wider than city to show surrounding highways
-const detroitCityBounds = L.latLngBounds([
-
-    [42.18,-83.38],
-    [42.52,-82.82]
+    [42.255,-83.288],
+    [42.450,-82.910]
 
 ]);
 
@@ -565,14 +556,18 @@ detroitOverlay.once("load", function () {
 
 });
 
-detroitMap.fitBounds(detroitCityBounds);
+detroitMap.fitBounds(detroitBounds);
 
-// Pass null as imageOverlayInstance so boundary doesn't override PNG bounds
-addCityBoundary(detroitMap, "data/Detroit_boundaries.geojson", null, detroitCityBounds, true, false, {
+addCityBoundary(detroitMap, "data/Detroit_boundaries.geojson", detroitOverlay, detroitBounds, true, true, {
     color: "#cfe4ff",
     weight: 2,
-    opacity: 0.5,
+    opacity: 0.3,
     fillOpacity: 0
+}).then(() => {
+
+    detroitGlowOverlay.setBounds(detroitOverlay.getBounds());
+    detroitGlowWideOverlay.setBounds(detroitOverlay.getBounds());
+
 });
 
 const detroitMapDate = document.getElementById("mapDateDetroit");

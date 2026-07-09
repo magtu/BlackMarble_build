@@ -277,3 +277,128 @@ d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data => {
             .attr("font-family", "Arial"));
 
 });
+
+const detroitSvg = d3
+    .select("#chartDetroit")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("style", "background: transparent;");
+
+const detroitEvents = [
+
+    {
+        index: 1,
+        title: "LED conversion begins",
+        text: "Residential streets converted to LED"
+    },
+
+    {
+        index: 2,
+        title: "Conversion complete",
+        text: "All 65,000 streetlights converted — satellite records sharp drop"
+    },
+
+    {
+        index: 4,
+        title: "New baseline",
+        text: "Post-conversion baseline established"
+    }
+
+];
+
+d3.csv("data/Detroit_Radiance_2014_2024.csv").then(data => {
+
+    data.forEach(d => {
+        d.radiance = +d.radiance;
+    });
+
+    const x = d3.scaleLinear()
+        .domain([0, data.length - 1])
+        .range([margin.left, width - margin.right]);
+
+    const y = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.radiance))
+        .nice()
+        .range([height - margin.bottom, margin.top]);
+
+    const line = d3.line()
+        .x((d, i) => x(i))
+        .y(d => y(d.radiance))
+        .curve(d3.curveCatmullRom);
+
+    detroitSvg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#4d8fff")
+        .attr("stroke-width", 8)
+        .attr("opacity", 0.08)
+        .attr("d", line);
+
+    detroitSvg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "#d9e8ff")
+        .attr("stroke-width", 2)
+        .attr("d", line);
+
+    detroitEvents.forEach(event => {
+
+        detroitSvg.append("circle")
+            .attr("cx", x(event.index))
+            .attr("cy", y(data[event.index].radiance))
+            .attr("r", 4)
+            .attr("fill", "#ffcc66");
+
+    });
+
+    const indicator = detroitSvg.append("circle")
+        .attr("r", 6)
+        .attr("fill", "white")
+        .attr("stroke", "#6da8ff")
+        .attr("stroke-width", 2)
+        .attr("cx", x(0))
+        .attr("cy", y(data[0].radiance));
+
+    detroitSvg.on("mousemove", function(event){
+
+        const [mouseX] = d3.pointer(event);
+
+        let index = Math.round(x.invert(mouseX));
+
+        index = Math.max(0, Math.min(data.length - 1, index));
+
+        indicator
+            .attr("cx", x(index))
+            .attr("cy", y(data[index].radiance));
+
+        updateDetroitYear(index);
+
+    });
+
+    const yearTicks = [];
+
+    for(let i = 0; i <= data.length - 1; i++){
+
+        yearTicks.push({
+            value: i,
+            label: String(2014 + i)
+        });
+
+    }
+
+    const axis = d3.axisBottom(x)
+        .tickValues(yearTicks.map(d => d.value))
+        .tickFormat((d, i) => yearTicks[i].label);
+
+    detroitSvg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(axis)
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line")
+            .attr("stroke", "#333"))
+        .call(g => g.selectAll("text")
+            .attr("fill", "#8a8a8a")
+            .attr("font-size", 12)
+            .attr("font-family", "Arial"));
+
+});
