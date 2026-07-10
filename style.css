@@ -699,9 +699,9 @@ main{
 
     position:absolute;
 
-    right:16px;
+    top:0;
 
-    top:50%;
+    left:0;
 
     transform:translateY(-50%);
 

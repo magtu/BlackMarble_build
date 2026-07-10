@@ -113,6 +113,8 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
                     mapInstance.fitBounds(boundaryBounds);
                 }
 
+                return boundaryBounds;
+
             }else if(fallbackBounds){
 
                 if(imageOverlayInstance){
@@ -123,9 +125,39 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
                     mapInstance.fitBounds(fallbackBounds);
                 }
 
+                return fallbackBounds;
+
             }
 
         });
+
+}
+
+// Anchors a .boundary-label to the real east edge of a boundary layer so the
+// connector line touches the boundary and tracks it as the map pans/zooms.
+function attachBoundaryLabel(mapInstance, mapElementId, labelElementId, boundaryBounds){
+
+    const mapEl = document.getElementById(mapElementId);
+    const labelEl = document.getElementById(labelElementId);
+
+    if(!mapEl || !labelEl || !boundaryBounds || !boundaryBounds.isValid()){
+        return;
+    }
+
+    const anchorLatLng = [boundaryBounds.getCenter().lat, boundaryBounds.getEast()];
+
+    function updateBoundaryLabelPosition(){
+
+        const point = mapInstance.latLngToContainerPoint(anchorLatLng);
+
+        labelEl.style.left = `${point.x}px`;
+        labelEl.style.top = `${point.y}px`;
+
+    }
+
+    mapInstance.on("move zoom", updateBoundaryLabelPosition);
+
+    updateBoundaryLabelPosition();
 
 }
 
@@ -184,7 +216,9 @@ addCityBoundary(map, "data/Berlin_boundaries.geojson", null, bounds, true, false
     weight: 1,
     opacity: 0.2,
     fillOpacity: 0
-}, false);
+}, false).then(boundaryBounds => {
+    attachBoundaryLabel(map, "map", "boundaryLabelBerlin", boundaryBounds);
+});
 
 // ---------- HTML ----------
 
@@ -372,10 +406,12 @@ kyivOverlay.once("load", function () {
 
 kyivMap.fitBounds(kyivBounds);
 
-addCityBoundary(kyivMap, "data/Kyiv_boundaries.geojson", kyivOverlay, kyivBounds).then(() => {
+addCityBoundary(kyivMap, "data/Kyiv_boundaries.geojson", kyivOverlay, kyivBounds).then(boundaryBounds => {
 
     kyivGlowOverlay.setBounds(kyivOverlay.getBounds());
     kyivGlowWideOverlay.setBounds(kyivOverlay.getBounds());
+
+    attachBoundaryLabel(kyivMap, "mapKyiv", "boundaryLabelKyiv", boundaryBounds);
 
 });
 
@@ -550,7 +586,9 @@ addCityBoundary(detroitMap, "data/Detroit_boundaries.geojson", null, detroitCity
     weight: 2,
     opacity: 0.5,
     fillOpacity: 0
-}, false);
+}, false).then(boundaryBounds => {
+    attachBoundaryLabel(detroitMap, "mapDetroit", "boundaryLabelDetroit", boundaryBounds);
+});
 
 const detroitMapDate = document.getElementById("mapDateDetroit");
 const detroitStoryText = document.getElementById("storyTextDetroit");
@@ -697,7 +735,9 @@ addCityBoundary(parisMap, "data/Paris_boundary.geojson", null, parisBounds, true
     weight: 2,
     opacity: 0.5,
     fillOpacity: 0
-}, false);
+}, false).then(boundaryBounds => {
+    attachBoundaryLabel(parisMap, "mapParis", "boundaryLabelParis", boundaryBounds);
+});
 
 const parisMapDate = document.getElementById("mapDateParis");
 const parisStoryText = document.getElementById("storyTextParis");
