@@ -13,6 +13,10 @@
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lora:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -50,11 +54,11 @@
                 </div>
 
                 <h2 id="mapDate">
-                    January 2014
+                    2013
                 </h2>
 
                 <div id="radiance">
-                    14.72 nW/cm²/sr
+                    — nW/cm²/sr
                 </div>
 
                 <p id="storyText">
@@ -63,16 +67,13 @@
 
             </div>
 
+            <div class="boundary-label" id="boundaryLabelBerlin">Berlin city limits</div>
+
             <div id="map"></div>
 
         </section>
 
         <section id="timeline">
-
-            <div class="data-note">
-                <div class="data-note-label">Data note</div>
-                <p>Radiance drops to zero in June and July most years. Near the summer solstice Berlin's nights are too short and bright for VIIRS to build a valid monthly composite, so no reading is recorded for those months.</p>
-            </div>
 
             <svg id="chart"></svg>
 
@@ -107,6 +108,8 @@
                 </p>
 
             </div>
+
+            <div class="boundary-label" id="boundaryLabelKyiv">Kyiv city limits</div>
 
             <div id="mapKyiv"></div>
 
@@ -148,6 +151,8 @@
 
             </div>
 
+            <div class="boundary-label" id="boundaryLabelDetroit">Detroit city limits</div>
+
             <div id="mapDetroit"></div>
 
         </section>
@@ -155,6 +160,48 @@
         <section id="timelineDetroit">
 
             <svg id="chartDetroit"></svg>
+
+        </section>
+
+    </section>
+
+    <section class="city-section">
+
+        <h2 class="city-title">Paris, Île-de-France</h2>
+
+        <p class="city-subtitle">The city that chose darkness — and found the stars</p>
+
+        <section id="mapContainerParis">
+
+            <div id="overlayParis">
+
+                <div class="source">
+                    NASA BLACK MARBLE
+                </div>
+
+                <h2 id="mapDateParis">
+                    2013
+                </h2>
+
+                <div id="radianceParis">
+                    — nW/cm²/sr
+                </div>
+
+                <p id="storyTextParis">
+                    Move through the timeline to explore how legislation reshaped Paris at night.
+                </p>
+
+            </div>
+
+            <div class="boundary-label" id="boundaryLabelParis">Île-de-France region</div>
+
+            <div id="mapParis"></div>
+
+        </section>
+
+        <section id="timelineParis">
+
+            <svg id="chartParis"></svg>
 
         </section>
 
@@ -204,6 +251,32 @@
 
         <p class="city-note">
             Data: NASA Black Marble VNP46A2 · 500m resolution · Annual median composite
+        </p>
+
+    </section>
+
+    <section class="city-section subsection">
+
+        <div class="subsection-label">ZOOM IN · GUJARAT COASTAL CORRIDOR</div>
+
+        <h2 class="city-title">The Gulf of Khambhat</h2>
+
+        <p class="city-subtitle">Where supply chains leave their mark on the night sky</p>
+
+        <p class="city-body">
+            Hugging India's northwestern coastline, this corridor traces the physical acceleration of industrial growth. Deepwater cargo hubs, petrochemical complexes and Special Economic Zones expanded relentlessly — captured in a 175% rise in nighttime radiance between 2016 and 2025.
+        </p>
+
+        <section id="mapContainerGujarat">
+            <div id="mapGujarat"></div>
+            <div class="gujarat-toggle">
+                <button type="button" class="gujarat-year-btn active" id="gujaratBtn2016" data-year="2016">2016</button>
+                <button type="button" class="gujarat-year-btn" id="gujaratBtn2025" data-year="2025">2025</button>
+            </div>
+        </section>
+
+        <p class="city-note">
+            Data: NASA Black Marble · VNP46A2 · 300m resolution · Annual median composite · Gulf of Khambhat region
         </p>
 
     </section>

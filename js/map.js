@@ -7,7 +7,9 @@
 const map = L.map("map", {
     zoomControl: false,
     attributionControl: false,
-    scrollWheelZoom: false
+    scrollWheelZoom: false,
+    zoomSnap: 0.1,
+    zoomDelta: 0.1
 });
 
 L.control.zoom({ position: "topright" }).addTo(map);
@@ -72,7 +74,7 @@ function keepLargestPolygon(data){
 
 }
 
-function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbackBounds, drawBoundary = true, keepLargestOnly = false, boundaryStyle = null){
+function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbackBounds, drawBoundary = true, keepLargestOnly = false, boundaryStyle = null, fitView = true){
 
     return fetch(geojsonPath)
         .then(response => response.json())
@@ -107,7 +109,9 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
                     imageOverlayInstance.setBounds(boundaryBounds);
                 }
 
-                mapInstance.fitBounds(boundaryBounds);
+                if(fitView){
+                    mapInstance.fitBounds(boundaryBounds);
+                }
 
             }else if(fallbackBounds){
 
@@ -115,7 +119,9 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
                     imageOverlayInstance.setBounds(fallbackBounds);
                 }
 
-                mapInstance.fitBounds(fallbackBounds);
+                if(fitView){
+                    mapInstance.fitBounds(fallbackBounds);
+                }
 
             }
 
@@ -125,13 +131,19 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
 
 const bounds = L.latLngBounds([
 
-    [52.28,12.95],
-    [52.72,13.87]
+    [52.338,13.088],
+    [52.677,13.761]
 
 ]);
 
+// View bounds — slightly zoomed in from previous
+const berlinViewBounds = L.latLngBounds([
+    [52.25, 12.99],
+    [52.75, 13.87]
+]);
+
 let berlinGlowWideOverlay = L.imageOverlay(
-    "images/Berlin/Berlin_2014_01.png",
+    "images/Berlin/Berlin_2013.png",
     bounds,
     {
         opacity:0.5,
@@ -140,7 +152,7 @@ let berlinGlowWideOverlay = L.imageOverlay(
 ).addTo(map);
 
 let berlinGlowOverlay = L.imageOverlay(
-    "images/Berlin/Berlin_2014_01.png",
+    "images/Berlin/Berlin_2013.png",
     bounds,
     {
         opacity:0.7,
@@ -149,7 +161,7 @@ let berlinGlowOverlay = L.imageOverlay(
 ).addTo(map);
 
 let overlay = L.imageOverlay(
-    "images/Berlin/Berlin_2014_01.png",
+    "images/Berlin/Berlin_2013.png",
     bounds,
     {
         opacity:0.9,
@@ -160,17 +172,19 @@ let overlay = L.imageOverlay(
 overlay.once("load", function () {
 
     overlay.getElement().style.mixBlendMode = "normal";
+    overlay.getElement().style.maskImage = "none";
+    overlay.getElement().style.webkitMaskImage = "none";
 
 });
 
-map.fitBounds(bounds);
+map.setView([52.507, 13.425], 9.5);
 
-addCityBoundary(map, "data/Berlin_boundaries.geojson", overlay, bounds).then(() => {
-
-    berlinGlowOverlay.setBounds(overlay.getBounds());
-    berlinGlowWideOverlay.setBounds(overlay.getBounds());
-
-});
+addCityBoundary(map, "data/Berlin_boundaries.geojson", null, bounds, true, false, {
+    color: "#cfe4ff",
+    weight: 1,
+    opacity: 0.2,
+    fillOpacity: 0
+}, false);
 
 // ---------- HTML ----------
 
@@ -223,26 +237,11 @@ const monthNames = [
 
 ];
 
-// ---------- Stories ----------
-
-const stories = {
-
-    "2014-01":
-        "NASA's Black Marble is a monthly satellite product that measures artificial light emitted from Earth's surface. Explore twelve years of observations over Berlin.",
-
-    "2020-03":
-        "COVID-19 restrictions affected activity across many cities. Explore whether Berlin's nighttime radiance shows a noticeable change.",
-
-    "2020-01":
-        "Berlin gradually replaced sodium streetlights with LEDs. Because the VIIRS sensor is less sensitive to blue-rich LED light, changes are not always reflected directly in the satellite measurements."
-
-};
-
 // ---------- Radiance ----------
 
 let radianceData=[];
 
-d3.csv("data/Berlin_Radiance_2014_2025.csv").then(data=>{
+d3.csv("data/Berlin_Radiance_2013_2025.csv").then(data=>{
 
     data.forEach(d=>{
 
@@ -252,7 +251,7 @@ d3.csv("data/Berlin_Radiance_2014_2025.csv").then(data=>{
 
     radianceData=data;
 
-    updateMonth(0);
+    updateBerlinYear(0);
 
 });
 
@@ -260,39 +259,24 @@ d3.csv("data/Berlin_Radiance_2014_2025.csv").then(data=>{
 // UPDATE
 // ======================================================
 
-function updateMonth(index){
+function updateBerlinYear(index){
 
-    const year=2014+Math.floor(index/12);
-
-    const month=(index%12)+1;
-
-    const monthString=String(month).padStart(2,"0");
-
-    // ---------- Image ----------
+    const year=2013+index;
 
     setOverlayImage(
 
         overlay,
-        `images/Berlin/Berlin_${year}_${monthString}.png`,
+        `images/Berlin/Berlin_${year}.png`,
         berlinGlowOverlay,
         berlinGlowWideOverlay
 
     );
 
-    // ---------- Date ----------
-
     if(mapDate){
 
-        setTextContent(
-
-            mapDate,
-            `${monthNames[month-1]} ${year}`
-
-        );
+        setTextContent(mapDate, String(year));
 
     }
-
-    // ---------- Radiance ----------
 
     if(radianceData.length){
 
@@ -305,13 +289,11 @@ function updateMonth(index){
 
     }
 
-    // ---------- Story ----------
+    const key=String(year);
 
-    const key=`${year}-${monthString}`;
+    if(berlinStories[key]){
 
-    if(stories[key]){
-
-        setTextContent(storyText, stories[key]);
+        setTextContent(storyText, berlinStories[key]);
 
     }else{
 
@@ -499,7 +481,9 @@ function updateKyivMonth(index){
 const detroitMap = L.map("mapDetroit", {
     zoomControl: false,
     attributionControl: false,
-    scrollWheelZoom: false
+    scrollWheelZoom: false,
+    zoomSnap: 0.1,
+    zoomDelta: 0.1
 });
 
 L.control.zoom({ position: "topright" }).addTo(detroitMap);
@@ -532,21 +516,12 @@ const detroitCityBounds = L.latLngBounds([
 
 ]);
 
-let detroitGlowWideOverlay = L.imageOverlay(
-    "images/Detroit/Detroit_2014.png",
-    detroitBounds,
-    {
-        opacity:0.5,
-        className:"glow-overlay-wide"
-    }
-).addTo(detroitMap);
-
 let detroitGlowOverlay = L.imageOverlay(
     "images/Detroit/Detroit_2014.png",
     detroitBounds,
     {
-        opacity:0.7,
-        className:"glow-overlay"
+        opacity:0.3,
+        className:"glow-overlay detroit-glow"
     }
 ).addTo(detroitMap);
 
@@ -555,25 +530,27 @@ let detroitOverlay = L.imageOverlay(
     detroitBounds,
     {
         opacity:0.9,
-        className:"city-overlay-sharp"
+        className:"city-overlay-sharp detroit-crisp"
     }
 ).addTo(detroitMap);
 
 detroitOverlay.once("load", function () {
 
-    detroitOverlay.getElement().style.mixBlendMode = "normal";
+    detroitOverlay.getElement().style.mixBlendMode = "screen";
 
 });
 
-detroitMap.fitBounds(detroitCityBounds);
+detroitMap.setView([42.35, -83.15],  9.5);
 
-// Pass null as imageOverlayInstance so boundary doesn't override PNG bounds
+// Pass null as imageOverlayInstance so boundary doesn't override PNG bounds.
+// fitView = false so this doesn't clobber the manual setView() above once
+// the geojson fetch resolves.
 addCityBoundary(detroitMap, "data/Detroit_boundaries.geojson", null, detroitCityBounds, true, false, {
     color: "#cfe4ff",
     weight: 2,
     opacity: 0.5,
     fillOpacity: 0
-});
+}, false);
 
 const detroitMapDate = document.getElementById("mapDateDetroit");
 const detroitStoryText = document.getElementById("storyTextDetroit");
@@ -603,8 +580,7 @@ function updateDetroitYear(index){
 
         detroitOverlay,
         `images/Detroit/Detroit_${year}.png`,
-        detroitGlowOverlay,
-        detroitGlowWideOverlay
+        detroitGlowOverlay
 
     );
 
@@ -637,6 +613,154 @@ function updateDetroitYear(index){
 
             detroitStoryText,
             "Move through the timeline to explore Detroit's changing nighttime landscape."
+
+        );
+
+    }
+
+}
+
+// ---------- Paris map ----------
+
+const parisMap = L.map("mapParis", {
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false
+});
+
+L.control.zoom({ position: "topright" }).addTo(parisMap);
+
+L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    {
+        maxZoom:18,
+        pane: "tilePane"
+    }
+).addTo(parisMap);
+
+const parisBoundaryPane = parisMap.createPane("boundaryPane");
+parisBoundaryPane.style.zIndex = 450;
+parisBoundaryPane.style.pointerEvents = "none";
+
+const parisBounds = L.latLngBounds([
+
+    [48.12, 1.45],
+    [49.24, 3.56]
+
+]);
+
+// View bounds — slightly zoomed in from full PNG extent
+const parisViewBounds = L.latLngBounds([
+
+    [48.22, 1.65],
+    [49.10, 3.35]
+
+]);
+
+let parisGlowWideOverlay = L.imageOverlay(
+    "images/Paris/Paris_2013.png",
+    parisBounds,
+    {
+        opacity:0.5,
+        className:"glow-overlay-wide"
+    }
+).addTo(parisMap);
+
+let parisGlowOverlay = L.imageOverlay(
+    "images/Paris/Paris_2013.png",
+    parisBounds,
+    {
+        opacity:0.7,
+        className:"glow-overlay"
+    }
+).addTo(parisMap);
+
+let parisOverlay = L.imageOverlay(
+    "images/Paris/Paris_2013.png",
+    parisBounds,
+    {
+        opacity:0.9,
+        className:"city-overlay-sharp"
+    }
+).addTo(parisMap);
+
+parisOverlay.once("load", function () {
+
+    parisOverlay.getElement().style.mixBlendMode = "screen";
+
+});
+
+parisMap.fitBounds(parisViewBounds);
+
+addCityBoundary(parisMap, "data/Paris_boundary.geojson", null, parisBounds, true, false, {
+    color: "#cfe4ff",
+    weight: 2,
+    opacity: 0.5,
+    fillOpacity: 0
+}, false);
+
+const parisMapDate = document.getElementById("mapDateParis");
+const parisStoryText = document.getElementById("storyTextParis");
+const parisRadiance = document.getElementById("radianceParis");
+
+let parisRadianceData=[];
+
+d3.csv("data/Paris_Radiance_2013_2025.csv").then(data=>{
+
+    data.forEach(d=>{
+
+        d.radiance=+d.radiance;
+
+    });
+
+    parisRadianceData=data;
+
+    updateParisYear(0);
+
+});
+
+function updateParisYear(index){
+
+    const year=2013+index;
+
+    setOverlayImage(
+
+        parisOverlay,
+        `images/Paris/Paris_${year}.png`,
+        parisGlowOverlay,
+        parisGlowWideOverlay
+
+    );
+
+    if(parisMapDate){
+
+        setTextContent(parisMapDate, String(year));
+
+    }
+
+    if(parisRadianceData.length){
+
+        setTextContent(
+
+            parisRadiance,
+            parisRadianceData[index].radiance.toFixed(2) + " nW/cm²/sr"
+
+        );
+
+    }
+
+    const key=String(year);
+
+    if(parisStories[key]){
+
+        setTextContent(parisStoryText, parisStories[key]);
+
+    }else{
+
+        setTextContent(
+
+            parisStoryText,
+            "Move through the timeline to explore how legislation reshaped Paris at night."
 
         );
 
@@ -791,3 +915,72 @@ if(indiaDivider && indiaCompare){
     updateIndiaDividerDisplay();
 
 }
+
+// ---------- Gujarat map ----------
+
+// --- GUJARAT MAP ---
+const gujaratMap = L.map("mapGujarat", {
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false,
+    zoomSnap: 0.1,
+    zoomDelta: 0.1,
+    dragging: false  // locked — no panning, just the crossfade
+});
+
+L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
+    { maxZoom: 18 }
+).addTo(gujaratMap);
+
+const gujaratBounds = L.latLngBounds([
+    [21.00, 72.00],
+    [22.50, 73.20]
+]);
+
+// 2016 layer — starts fully visible
+let gujarat2016 = L.imageOverlay(
+    "images/Gujarat/Gujarat_2016.png",
+    gujaratBounds,
+    { opacity: 1, className: "city-overlay-sharp" }
+).addTo(gujaratMap);
+
+// 2025 layer — starts invisible, fades in on scroll
+let gujarat2025 = L.imageOverlay(
+    "images/Gujarat/Gujarat_2025.png",
+    gujaratBounds,
+    { opacity: 0, className: "city-overlay-sharp" }
+).addTo(gujaratMap);
+
+gujarat2016.once("load", function() {
+    gujarat2016.getElement().style.mixBlendMode = "screen";
+});
+gujarat2025.once("load", function() {
+    gujarat2025.getElement().style.mixBlendMode = "screen";
+});
+
+gujaratMap.fitBounds(gujaratBounds);
+
+// --- CLICK-DRIVEN CROSSFADE ---
+// Clicking a year button crossfades to that year and highlights the active button
+const gujaratBtn2016 = document.getElementById("gujaratBtn2016");
+const gujaratBtn2025 = document.getElementById("gujaratBtn2025");
+
+function setGujaratYear(year) {
+    const showLater = year === "2025";
+
+    gujarat2016.setOpacity(showLater ? 0 : 1);
+    gujarat2025.setOpacity(showLater ? 1 : 0);
+
+    if (gujaratBtn2016) gujaratBtn2016.classList.toggle("active", !showLater);
+    if (gujaratBtn2025) gujaratBtn2025.classList.toggle("active", showLater);
+}
+
+if (gujaratBtn2016) {
+    gujaratBtn2016.addEventListener("click", () => setGujaratYear("2016"));
+}
+if (gujaratBtn2025) {
+    gujaratBtn2025.addEventListener("click", () => setGujaratYear("2025"));
+}
+
+setGujaratYear("2016");

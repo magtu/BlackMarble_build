@@ -17,7 +17,7 @@ body{
     background:#05070d;
     color:white;
 
-    font-family:Inter,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-family:'Lora',serif;
     line-height:1.5;
     letter-spacing:0.01em;
 
@@ -39,11 +39,13 @@ body{
 
 h1{
 
+    font-family:'DM Serif Display',serif;
+
     font-size:clamp(2.4rem,4.4vw,3.8rem);
 
-    font-weight:700;
+    font-weight:400;
 
-    letter-spacing:-0.035em;
+    letter-spacing:0.01em;
 
     line-height:1.02;
 
@@ -51,11 +53,21 @@ h1{
 
 }
 
+h2{
+
+    font-family:'DM Serif Display',serif;
+
+    font-weight:400;
+
+}
+
 .subtitle{
+
+    font-family:'Lora',serif;
 
     font-size:1.02rem;
 
-    color:#8eb4ff;
+    color:#8a95a7;
 
     max-width:760px;
 
@@ -66,6 +78,8 @@ h1{
 }
 
 .intro{
+
+    font-family:'Lora',serif;
 
     max-width:760px;
 
@@ -93,21 +107,25 @@ main{
 
 .city-title{
 
+    font-family:'DM Serif Display',serif;
+
     text-align:center;
 
     font-size:1.7rem;
 
-    font-weight:700;
+    font-weight:400;
 
     margin:0 0 8px;
 
     color:#f2f6ff;
 
-    letter-spacing:-0.02em;
+    letter-spacing:0.02em;
 
 }
 
 .city-subtitle{
+
+    font-family:'Lora',serif;
 
     text-align:center;
 
@@ -122,6 +140,8 @@ main{
 }
 
 .city-body{
+
+    font-family:'Lora',serif;
 
     max-width:640px;
 
@@ -138,6 +158,8 @@ main{
 }
 
 .city-note{
+
+    font-family:'Lora',serif;
 
     max-width:640px;
 
@@ -172,6 +194,7 @@ main{
 #mapContainer,
 #mapContainerKyiv,
 #mapContainerDetroit,
+#mapContainerParis,
 #mapContainerIndia{
 
     position:relative;
@@ -185,6 +208,7 @@ main{
 #map,
 #mapKyiv,
 #mapDetroit,
+#mapParis,
 #mapIndia{
 
     width:100%;
@@ -224,7 +248,8 @@ main{
 
 }
 
-#mapContainerDetroit::after{
+#mapContainerDetroit::after,
+#mapContainerParis::after{
 
     content:"";
 
@@ -253,6 +278,180 @@ main{
             rgba(5,7,13,0.6) 80%,
             rgba(5,7,13,1) 95%
         );
+
+}
+
+/* ==========================================================
+   GUJARAT SUBSECTION
+   ========================================================== */
+
+.subsection{
+
+    border-top:0.5px solid rgba(255,255,255,0.08);
+
+    padding-top:48px;
+
+    margin-top:0;
+
+}
+
+.subsection-label{
+
+    font-family:'DM Mono',monospace;
+
+    font-size:0.68rem;
+
+    letter-spacing:0.22em;
+
+    color:#7e899c;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    text-transform:uppercase;
+
+}
+
+#mapContainerGujarat{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:20px;
+
+}
+
+#mapGujarat{
+
+    width:100%;
+
+    height:500px;
+
+    background:transparent;
+
+    border-radius:20px;
+
+}
+
+#mapGujarat .leaflet-image-layer{
+
+    transition:opacity 0.6s ease;
+
+}
+
+#mapContainerGujarat::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0; left:0;
+
+    width:100%; height:100%;
+
+    pointer-events:none;
+
+    z-index:500;
+
+    background:radial-gradient(ellipse 85% 85% at 50% 50%,
+        rgba(5,7,13,0) 0%,
+        rgba(5,7,13,0) 45%,
+        rgba(5,7,13,0.5) 68%,
+        rgba(5,7,13,0.9) 85%,
+        rgba(5,7,13,1) 100%
+    );
+
+}
+
+.gujarat-toggle{
+
+    position:absolute;
+
+    left:20px;
+
+    bottom:20px;
+
+    z-index:1001;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.gujarat-year-btn{
+
+    appearance:none;
+
+    background:none;
+
+    border:none;
+
+    padding:0 0 6px;
+
+    font-family:'DM Mono',monospace;
+
+    font-size:0.85rem;
+
+    font-weight:500;
+
+    letter-spacing:0.04em;
+
+    color:#9aa3b0;
+
+    cursor:pointer;
+
+    position:relative;
+
+    transition:color 0.25s ease;
+
+}
+
+.gujarat-year-btn::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:2px;
+
+    background:currentColor;
+
+    opacity:0.35;
+
+    transition:opacity 0.25s ease, background-color 0.25s ease, height 0.25s ease;
+
+}
+
+.gujarat-year-btn:hover{
+
+    color:#e4c94a;
+
+}
+
+.gujarat-year-btn.active{
+
+    color:#f5e34d;
+
+    font-weight:700;
+
+}
+
+.gujarat-year-btn.active::after{
+
+    background:#f5e34d;
+
+    opacity:1;
+
+    height:3px;
 
 }
 
@@ -478,6 +677,8 @@ main{
 
 .leaflet-control-zoom a{
 
+    font-family:Inter,"Segoe UI",Helvetica,Arial,sans-serif;
+
     background:rgba(11,15,24,.92);
 
     color:#fff;
@@ -494,13 +695,64 @@ main{
 
 }
 
+.boundary-label{
+
+    position:absolute;
+
+    right:16px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    z-index:1001;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-family:'DM Mono',monospace;
+
+    font-size:0.65rem;
+
+    letter-spacing:0.14em;
+
+    text-transform:uppercase;
+
+    color:#cfe4ff;
+
+    opacity:0.55;
+
+    pointer-events:none;
+
+    white-space:nowrap;
+
+}
+
+.boundary-label::before{
+
+    content:"";
+
+    width:26px;
+
+    height:1px;
+
+    background:currentColor;
+
+    opacity:0.6;
+
+}
+
 /* ==========================================================
    TEXT OVERLAY
    ========================================================== */
 
 #overlay,
 #overlayKyiv,
-#overlayDetroit{
+#overlayDetroit,
+#overlayParis{
 
     position:absolute;
 
@@ -524,11 +776,11 @@ main{
 
         90deg,
 
-        rgba(4,8,16,.48) 0%,
+        rgba(4,8,16,.72) 0%,
 
-        rgba(4,8,16,.26) 42%,
+        rgba(4,8,16,.48) 42%,
 
-        rgba(4,8,16,.08) 76%,
+        rgba(4,8,16,.12) 76%,
 
         rgba(4,8,16,0) 100%
 
@@ -539,6 +791,8 @@ main{
 }
 
 .source{
+
+    font-family:'DM Mono',monospace;
 
     font-size:0.72rem;
 
@@ -554,29 +808,33 @@ main{
 
 #mapDate,
 #mapDateKyiv,
-#mapDateDetroit{
+#mapDateDetroit,
+#mapDateParis{
 
     font-size:2rem;
 
-    font-weight:700;
+    font-weight:400;
 
     line-height:1.15;
 
     margin-bottom:8px;
 
-    letter-spacing:-0.02em;
+    letter-spacing:0.01em;
 
 }
 
 #radiance,
 #radianceKyiv,
-#radianceDetroit{
+#radianceDetroit,
+#radianceParis{
 
-    color:#8eb4ff;
+    font-family:'DM Mono',monospace;
 
-    font-size:1.05rem;
+    color:#8a95a7;
 
-    font-weight:600;
+    font-size:0.95rem;
+
+    font-weight:400;
 
     margin-bottom:20px;
 
@@ -584,7 +842,10 @@ main{
 
 #storyText,
 #storyTextKyiv,
-#storyTextDetroit{
+#storyTextDetroit,
+#storyTextParis{
+
+    font-family:'Lora',serif;
 
     width:min(280px,100%);
 
@@ -602,7 +863,8 @@ main{
 
 #timeline,
 #timelineKyiv,
-#timelineDetroit{
+#timelineDetroit,
+#timelineParis{
 
     position:absolute;
 
@@ -624,7 +886,8 @@ main{
 
 #chart,
 #chartKyiv,
-#chartDetroit{
+#chartDetroit,
+#chartParis{
 
     width:100%;
 
@@ -644,45 +907,6 @@ main{
 
 }
 
-.data-note{
-
-    position:absolute;
-
-    top:-170px;
-    right:20px;
-
-    width:min(240px,60vw);
-
-    padding:12px 14px;
-
-    border-radius:10px;
-
-    background:rgba(4,8,16,.82);
-    border:1px solid rgba(255,255,255,.1);
-    box-shadow:0 8px 20px rgba(0,0,0,.3);
-
-    pointer-events:none;
-
-}
-
-.data-note-label{
-
-    font-size:0.66rem;
-    font-weight:700;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:#8eb4ff;
-    margin-bottom:4px;
-
-}
-
-.data-note p{
-
-    font-size:0.72rem;
-    line-height:1.5;
-    color:#c0c7d0;
-
-}
 
 /* ==========================================================
    BLACK MARBLE IMAGE
@@ -705,40 +929,59 @@ main{
         saturate(0.48);
 }
 
+#mapDetroit .leaflet-tile{
+    filter:
+        brightness(1.15)
+        contrast(1.0)
+        saturate(0.8);
+}
+
 .city-overlay-sharp{
     filter:
-        brightness(1.08)
-        contrast(1.18)
-        blur(1.5px);
+        brightness(1.06)
+        contrast(1.12);
 }
 
 .city-overlay-sharp.berlin-warm{
     filter:
-        brightness(1.06)
-        contrast(1.18)
-        saturate(1.25)
-        hue-rotate(-12deg)
-        blur(1.5px);
+        brightness(1.04)
+        contrast(1.1)
+        saturate(1.08)
+        hue-rotate(-6deg);
 }
 
 .glow-overlay{
     filter:
-        blur(16px)
-        brightness(1.3)
-        saturate(1.35);
-    opacity:0.7;
+        blur(6px)
+        brightness(1.06)
+        saturate(1.06);
+    opacity:0.25;
     image-rendering:auto;
     mix-blend-mode:screen;
 }
 
 .glow-overlay-wide{
     filter:
-        blur(30px)
-        brightness(1.4)
-        saturate(1.5);
-    opacity:0.5;
+        blur(12px)
+        brightness(1.08)
+        saturate(1.08);
+    opacity:0.15;
     image-rendering:auto;
     mix-blend-mode:screen;
+}
+
+.glow-overlay.detroit-glow{
+    filter:
+        blur(5px)
+        brightness(1.15)
+        saturate(1.15);
+}
+
+.city-overlay-sharp.detroit-crisp{
+    filter:
+        brightness(1.05)
+        contrast(1.15)
+        blur(0.3px);
 }
 
 
@@ -756,7 +999,8 @@ main{
 
     #overlay,
     #overlayKyiv,
-    #overlayDetroit{
+    #overlayDetroit,
+    #overlayParis{
 
         position:relative;
 
@@ -772,7 +1016,8 @@ main{
 
     #storyText,
     #storyTextKyiv,
-    #storyTextDetroit{
+    #storyTextDetroit,
+    #storyTextParis{
 
         width:100%;
 
@@ -781,6 +1026,7 @@ main{
     #map,
     #mapKyiv,
     #mapDetroit,
+    #mapParis,
     #mapIndia{
 
         height:500px;
