@@ -252,25 +252,6 @@ function setOverlayImage(overlayInstance, imageUrl, ...glowInstances){
 
 }
 
-// ---------- Month Names ----------
-
-const monthNames = [
-
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-
-];
-
 // ---------- Radiance ----------
 
 let radianceData=[];
@@ -366,13 +347,13 @@ kyivBoundaryPane.style.pointerEvents = "none";
 
 const kyivBounds = L.latLngBounds([
 
-    [49.95,30.05],
-    [50.80,31.15]
+    [50.213, 30.239],
+    [50.590, 30.826]
 
 ]);
 
 let kyivGlowWideOverlay = L.imageOverlay(
-    "images/Kyiv/Kyiv_2014_01.png",
+    "images/Kyiv/Kyiv_2013.png",
     kyivBounds,
     {
         opacity:0.5,
@@ -381,7 +362,7 @@ let kyivGlowWideOverlay = L.imageOverlay(
 ).addTo(kyivMap);
 
 let kyivGlowOverlay = L.imageOverlay(
-    "images/Kyiv/Kyiv_2014_01.png",
+    "images/Kyiv/Kyiv_2013.png",
     kyivBounds,
     {
         opacity:0.7,
@@ -390,7 +371,7 @@ let kyivGlowOverlay = L.imageOverlay(
 ).addTo(kyivMap);
 
 let kyivOverlay = L.imageOverlay(
-    "images/Kyiv/Kyiv_2014_01.png",
+    "images/Kyiv/Kyiv_2013.png",
     kyivBounds,
     {
         opacity:0.9,
@@ -419,28 +400,9 @@ const kyivMapDate = document.getElementById("mapDateKyiv");
 const kyivStoryText = document.getElementById("storyTextKyiv");
 const kyivRadiance = document.getElementById("radianceKyiv");
 
-const kyivStories = {
-
-    "2014-01":
-        "This is the beginning of the Black Marble record. Kyiv appears as a brightly illuminated European capital before years of political upheaval and war.",
-
-    "2014-02":
-        "The Euromaidan protests culminated in February 2014, marking a turning point in Ukraine's modern history. Explore whether Kyiv's nighttime radiance shows noticeable changes during this period.",
-
-    "2022-02":
-        "On 24 February 2022, Russia launched its full-scale invasion of Ukraine. Nighttime satellite imagery provides a unique perspective on how conflict can affect urban lighting and everyday life.",
-
-    "2022-10":
-        "Beginning in October 2022, repeated attacks on Ukraine's energy infrastructure caused widespread power outages and planned blackouts. Compare Kyiv's nighttime brightness with previous years.",
-
-    "2023-03":
-        "Electricity supply gradually stabilized during 2023. Explore how Kyiv's nighttime illumination changed as the power grid recovered."
-
-};
-
 let kyivRadianceData=[];
 
-d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data=>{
+d3.csv("data/Kyiv_Radiance_2013_2025.csv").then(data=>{
 
     data.forEach(d=>{
 
@@ -450,22 +412,18 @@ d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data=>{
 
     kyivRadianceData=data;
 
-    updateKyivMonth(0);
+    updateKyivYear(0);
 
 });
 
-function updateKyivMonth(index){
+function updateKyivYear(index){
 
-    const year=2014+Math.floor(index/12);
-
-    const month=(index%12)+1;
-
-    const monthString=String(month).padStart(2,"0");
+    const year=2013+index;
 
     setOverlayImage(
 
         kyivOverlay,
-        `images/Kyiv/Kyiv_${year}_${monthString}.png`,
+        `images/Kyiv/Kyiv_${year}.png`,
         kyivGlowOverlay,
         kyivGlowWideOverlay
 
@@ -473,12 +431,7 @@ function updateKyivMonth(index){
 
     if(kyivMapDate){
 
-        setTextContent(
-
-            kyivMapDate,
-            `${monthNames[month-1]} ${year}`
-
-        );
+        setTextContent(kyivMapDate, String(year));
 
     }
 
@@ -493,7 +446,7 @@ function updateKyivMonth(index){
 
     }
 
-    const key=`${year}-${monthString}`;
+    const key=String(year);
 
     if(kyivStories[key]){
 
@@ -849,7 +802,7 @@ let indiaOverlay2025 = L.imageOverlay(
     "images/India/India_2025.png",
     indiaBounds,
     {
-        opacity:1
+        opacity:0
     }
 ).addTo(indiaMap);
 
@@ -878,83 +831,32 @@ addCityBoundary(indiaMap, "data/India_boundary.geojson", null, indiaBounds, true
 
 });
 
-// ---------- India compare divider ----------
+// ---------- India year toggle ----------
 
-const indiaCompare = document.getElementById("indiaCompare");
-const indiaDivider = document.getElementById("indiaDivider");
-const indiaMapEl = document.getElementById("mapIndia");
+const indiaBtn2016 = document.getElementById("indiaBtn2016");
+const indiaBtn2025 = document.getElementById("indiaBtn2025");
 
-// The divider is pinned to a real longitude (not a fixed container %), so it
-// stays aligned with the image's clip boundary when the map is panned/zoomed.
-let indiaDividerLng = indiaBounds.getCenter().lng;
+function setIndiaYear(year){
 
-function updateIndiaDividerDisplay(){
+    const showLater = year === "2025";
 
-    const mapRect = indiaMapEl.getBoundingClientRect();
-    const point = indiaMap.latLngToContainerPoint([indiaBounds.getCenter().lat, indiaDividerLng]);
-    const percent = (point.x / mapRect.width) * 100;
+    indiaOverlay2016.setOpacity(showLater ? 0 : 1);
+    indiaOverlay2025.setOpacity(showLater ? 1 : 0);
 
-    if(indiaDivider){
-
-        indiaDivider.style.left = `${percent}%`;
-
-    }
-
-    const imgEl = indiaOverlay2025.getElement();
-
-    if(imgEl){
-
-        const imgRect = imgEl.getBoundingClientRect();
-        const imgOffsetX = imgRect.left - mapRect.left;
-        const imgPercent = ((point.x - imgOffsetX) / imgRect.width) * 100;
-        const clipLeft = Math.max(0, Math.min(100, imgPercent));
-
-        // Clip the LEFT side of the 2025 (top) layer so it only shows to the
-        // right of the divider, letting 2016 (bottom layer) show through on
-        // the left - matching the "2016" / "2025" label positions.
-        imgEl.style.clipPath = `inset(0 0 0 ${clipLeft}%)`;
-
-    }
+    if(indiaBtn2016) indiaBtn2016.classList.toggle("active", !showLater);
+    if(indiaBtn2025) indiaBtn2025.classList.toggle("active", showLater);
 
 }
 
-function updateIndiaDividerFromEvent(event){
-
-    const mapRect = indiaMapEl.getBoundingClientRect();
-    const x = event.clientX - mapRect.left;
-    const latlng = indiaMap.containerPointToLatLng([x, mapRect.height / 2]);
-
-    indiaDividerLng = latlng.lng;
-
-    updateIndiaDividerDisplay();
-
+if(indiaBtn2016){
+    indiaBtn2016.addEventListener("click", () => setIndiaYear("2016"));
 }
 
-if(indiaDivider && indiaCompare){
-
-    indiaDivider.addEventListener("pointerdown", event => {
-
-        event.preventDefault();
-        indiaDivider.setPointerCapture(event.pointerId);
-        updateIndiaDividerFromEvent(event);
-
-    });
-
-    indiaDivider.addEventListener("pointermove", event => {
-
-        if(event.buttons !== 1){
-            return;
-        }
-
-        updateIndiaDividerFromEvent(event);
-
-    });
-
-    indiaMap.on("move zoom", updateIndiaDividerDisplay);
-
-    updateIndiaDividerDisplay();
-
+if(indiaBtn2025){
+    indiaBtn2025.addEventListener("click", () => setIndiaYear("2025"));
 }
+
+setIndiaYear("2016");
 
 // ---------- Gujarat map ----------
 
@@ -964,9 +866,10 @@ const gujaratMap = L.map("mapGujarat", {
     attributionControl: false,
     scrollWheelZoom: false,
     zoomSnap: 0.1,
-    zoomDelta: 0.1,
-    dragging: false  // locked — no panning, just the crossfade
+    zoomDelta: 0.1
 });
+
+L.control.zoom({ position: "topright" }).addTo(gujaratMap);
 
 L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
@@ -982,7 +885,7 @@ const gujaratBounds = L.latLngBounds([
 let gujarat2016 = L.imageOverlay(
     "images/Gujarat/Gujarat_2016.png",
     gujaratBounds,
-    { opacity: 1, className: "city-overlay-sharp" }
+    { opacity: 0.85, className: "city-overlay-sharp" }
 ).addTo(gujaratMap);
 
 // 2025 layer — starts invisible, fades in on scroll
@@ -1009,8 +912,8 @@ const gujaratBtn2025 = document.getElementById("gujaratBtn2025");
 function setGujaratYear(year) {
     const showLater = year === "2025";
 
-    gujarat2016.setOpacity(showLater ? 0 : 1);
-    gujarat2025.setOpacity(showLater ? 1 : 0);
+    gujarat2016.setOpacity(showLater ? 0 : 0.85);
+    gujarat2025.setOpacity(showLater ? 0.85 : 0);
 
     if (gujaratBtn2016) gujaratBtn2016.classList.toggle("active", !showLater);
     if (gujaratBtn2025) gujaratBtn2025.classList.toggle("active", showLater);

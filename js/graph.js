@@ -1,7 +1,7 @@
 const width = 1100;
-const height = 120;
+const height = 200;
 const margin = {
-    top: 20,
+    top: 28,
     right: 30,
     bottom: 35,
     left: 40
@@ -153,38 +153,32 @@ const kyivSvg = d3
 const kyivEvents = [
 
     {
-        month: 0,
-        title: "Beginning of the record",
-        text: "This is the beginning of the Black Marble record. Kyiv appears as a brightly illuminated European capital before years of political upheaval and war."
-    },
-
-    {
-        month: 1,
+        index: 1,
         title: "Euromaidan",
-        text: "The Euromaidan protests culminated in February 2014, marking a turning point in Ukraine's modern history. Explore whether Kyiv's nighttime radiance shows noticeable changes during this period."
+        text: "Euromaidan — political revolution reshapes Ukraine"
     },
 
     {
-        month: 97,
+        index: 9,
         title: "Full-scale invasion",
-        text: "On 24 February 2022, Russia launched its full-scale invasion of Ukraine. Nighttime satellite imagery provides a unique perspective on how conflict can affect urban lighting and everyday life."
+        text: "Feb 24: Full-scale invasion begins"
     },
 
     {
-        month: 105,
+        index: 10,
         title: "Energy infrastructure attacks",
-        text: "Beginning in October 2022, repeated attacks on Ukraine's energy infrastructure caused widespread power outages and planned blackouts. Compare Kyiv's nighttime brightness with previous years."
+        text: "Energy infrastructure attacks — widespread blackouts across the city"
     },
 
     {
-        month: 110,
+        index: 11,
         title: "Recovery",
-        text: "Electricity supply gradually stabilized during 2023. Explore how Kyiv's nighttime illumination changed as the power grid recovered."
+        text: "Grid recovery underway"
     }
 
 ];
 
-d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data => {
+d3.csv("data/Kyiv_Radiance_2013_2025.csv").then(data => {
 
     data.forEach(d => {
         d.radiance = +d.radiance;
@@ -222,8 +216,8 @@ d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data => {
     kyivEvents.forEach(event => {
 
         kyivSvg.append("circle")
-            .attr("cx", x(event.month))
-            .attr("cy", y(data[event.month].radiance))
+            .attr("cx", x(event.index))
+            .attr("cy", y(data[event.index].radiance))
             .attr("r", 4)
             .attr("fill", "#ffcc66");
 
@@ -241,28 +235,25 @@ d3.csv("data/Kyiv_Radiance_2014_2025.csv").then(data => {
 
         const [mouseX] = d3.pointer(event);
 
-        let month = Math.round(x.invert(mouseX));
+        let index = Math.round(x.invert(mouseX));
 
-        month = Math.max(0, Math.min(data.length - 1, month));
+        index = Math.max(0, Math.min(data.length - 1, index));
 
         indicator
-            .transition()
-            .duration(260)
-            .ease(d3.easeCubicOut)
-            .attr("cx", x(month))
-            .attr("cy", y(data[month].radiance));
+            .attr("cx", x(index))
+            .attr("cy", y(data[index].radiance));
 
-        updateKyivMonth(month);
+        updateKyivYear(index);
 
     });
 
     const yearTicks = [];
 
-    for(let year = 2014; year <= 2025; year++){
+    for(let i = 0; i <= data.length - 1; i++){
 
         yearTicks.push({
-            value: (year - 2014) * 12,
-            label: String(year)
+            value: i,
+            label: String(2013 + i)
         });
 
     }
