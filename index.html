@@ -23,23 +23,147 @@
 
 <body>
 
-<header id="hero">
+<section class="hero-section">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">NASA Black Marble · 2013–2025</p>
+    <h1 class="hero-title">The Flickering Planet</h1>
+    <p class="hero-subtitle">Stories of cities across the world as revealed from the trends in satellite's night data.</p>
+    <div class="hero-divider"></div>
+    <p class="hero-p">Seen from space, a city at night looks static but when we look at the same city night after night, month after month, year after year, and the picture starts to <strong>flicker</strong>. A sudden brightening might mean a new industrial zone has come online, or a wave of urban growth. A sudden dimming might mean a government cutting energy costs or a war knocking out power grids. Light, it turns out, is a <strong>surprisingly honest witness</strong>. It records economic booms, political crises, environmental policy, even the seasons. All in the same simple signal: how much light escapes into space each night.</p>
+    <p class="hero-p">This same data is also how scientists track <strong>light pollution</strong>, also called the Artificial Light at Night (ALAN). The glow spilling upward off our cities doesn't just look pretty from orbit; down on the ground, it washes out the night sky, disrupts wildlife, and interferes with human sleep patterns. So every map in this project is really telling two stories at once: a story about a city's stability, and a story about how much of the night sky that city is quietly erasing.</p>
+    <p class="hero-closing">Eight places. Twelve years. Each light telling a different story — about economy, seasons, politics, and the sky above.</p>
+  </div>
+</section>
 
-    <h1>The Flickering Planet</h1>
+<section class="world-map-section">
+  <div class="world-map-inner">
+    <div class="world-map-frame world-map-frame-a" id="worldMapFrameA" style="background-image:url('images/blackmarble_world_2012.jpg');"></div>
+    <div class="world-map-frame world-map-frame-b" id="worldMapFrameB" style="background-image:url('images/blackmarble_world_2016.jpg');"></div>
+    <svg class="world-map-svg" viewBox="0 0 1920 960"
+         preserveAspectRatio="xMidYMid meet"
+         xmlns="http://www.w3.org/2000/svg">
 
-    <p class="subtitle">
-        How NASA's Black Marble reveals the changing rhythm of cities after dark
-    </p>
+      <style>
+        .mp { fill: none; }
+        .city-name {
+          font-family: 'DM Serif Display', serif;
+          font-size: 25px;
+          fill: #c8d8f8;
+          opacity: 0.9;
+          letter-spacing:0.03em;
+        }
+        .country-name {
+          font-family: 'DM Mono', monospace;
+          font-size: 14px;
+          fill: #c8d8f8;
+          letter-spacing: 0.05em;
+          opacity: 0.6;
+        }
+        .city-marker { cursor: pointer; }
+        .city-marker:hover .city-name { opacity: 1; fill: #e8f0ff; }
+        .city-marker:hover circle.dot { opacity: 1; }
+      </style>
 
-    <p class="intro">
-        Every night, satellites record the artificial light emitted from Earth's surface. NASA's Black Marble dataset combines these observations into monthly maps of nighttime illumination, providing a consistent record of urban lighting over time. Explore twelve years of observations from Berlin and Kyiv to discover how seasons, technology and major events have shaped the urban night.
-    </p>
+      <!-- BERLIN -->
+      <g class="city-marker" onclick="document.querySelector('#berlin').scrollIntoView({behavior:'smooth'})">
+        <circle class="mp d1" cx="1030" cy="199" r="22" fill="#8ab4f8"/>
+        <line x1="1016" y1="199" x2="970" y2="199" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="970" y1="199" x2="932" y2="179" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <circle class="dot" cx="1030" cy="199" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+        <text x="926" y="175" class="city-name" text-anchor="end">Berlin</text>
+        <text x="926" y="197" class="country-name" text-anchor="end">Germany</text>
+      </g>
 
-</header>
+      <!-- KYIV -->
+      <g class="city-marker" onclick="document.querySelector('#kyiv').scrollIntoView({behavior:'smooth'})">
+        <circle class="mp d2" cx="1123" cy="211" r="22" fill="#8ab4f8"/>
+        <line x1="1136" y1="211" x2="1173" y2="199" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="1173" y1="199" x2="1218" y2="199" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <circle class="dot" cx="1123" cy="211" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+        <text x="1224" y="195" class="city-name" text-anchor="start">Kyiv</text>
+        <text x="1224" y="217" class="country-name" text-anchor="start">Ukraine</text>
+      </g>
+
+      <!-- PARIS -->
+      <g class="city-marker" onclick="document.querySelector('#paris').scrollIntoView({behavior:'smooth'})">
+        <circle class="mp d3" cx="971" cy="219" r="22" fill="#8ab4f8"/>
+        <line x1="971" y1="232" x2="971" y2="264" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="971" y1="264" x2="939" y2="287" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <circle class="dot" cx="971" cy="219" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+        <text x="935" y="301" class="city-name" text-anchor="end">Paris</text>
+        <text x="935" y="323" class="country-name" text-anchor="end">France</text>
+      </g>
+
+      <!-- INDIA -->
+      <g class="city-marker" onclick="document.querySelector('#india').scrollIntoView({behavior:'smooth'})">
+        <circle class="mp d4" cx="1350" cy="377" r="22" fill="#8ab4f8"/>
+        <line x1="1363" y1="377" x2="1402" y2="363" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="1402" y1="363" x2="1450" y2="363" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <circle class="dot" cx="1350" cy="377" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+        <text x="1456" y="359" class="city-name" text-anchor="start">Gujarat</text>
+        <text x="1456" y="381" class="country-name" text-anchor="start">India</text>
+      </g>
+
+      <!-- DETROIT -->
+      <g class="city-marker" onclick="document.querySelector('#detroit').scrollIntoView({behavior:'smooth'})">
+        <circle class="mp d5" cx="523" cy="258" r="22" fill="#8ab4f8"/>
+        <line x1="523" y1="245" x2="523" y2="212" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="523" y1="212" x2="483" y2="190" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <circle class="dot" cx="523" cy="258" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+        <text x="477" y="168" class="city-name" text-anchor="end">Detroit</text>
+        <text x="477" y="190" class="country-name" text-anchor="end">USA</text>
+      </g>
+
+      <!-- PERMIAN BASIN -->
+     <g class="city-marker" onclick="document.querySelector('#permian').scrollIntoView({behavior:'smooth'})">
+  <circle class="mp d6" cx="441" cy="305" r="22" fill="#8ab4f8"/>
+  <line x1="428" y1="305" x2="391" y2="323" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="391" y1="323" x2="341" y2="323" stroke="#8ab4f8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+  <circle class="dot" cx="441" cy="305" r="13" fill="rgba(138,180,248,0.06)" stroke="#8ab4f8" stroke-width="2" opacity="0.8"/>
+  <text x="335" y="319" class="city-name" text-anchor="end">Permian Basin, Texas</text>
+  <text x="335" y="341" class="country-name" text-anchor="end">USA</text>
+</g>
+
+    </svg>
+  </div>
+</section>
+
+<script>
+// Flicker between the 2012 and 2016 world map frames every half second,
+// like a GIF, to visually echo the "flickering" theme of the page.
+(function () {
+  const frameA = document.getElementById('worldMapFrameA');
+  const frameB = document.getElementById('worldMapFrameB');
+  let showingA = true;
+
+  frameA.classList.add('is-visible');
+
+  setInterval(function () {
+    showingA = !showingA;
+    frameA.classList.toggle('is-visible', showingA);
+    frameB.classList.toggle('is-visible', !showingA);
+  }, 500);
+})();
+</script>
+
+<section class="scale-section">
+  <div class="scale-inner">
+    <p class="scale-body">Each map shows radiance — how much light escapes upward from Earth's surface, measured in nanowatts per square centimeter per steradian (nW/cm²/sr). Brighter pixels mean more light; darker pixels mean less.</p>
+    <div class="scale-bar-wrap">
+      <div class="scale-bar"></div>
+      <div class="scale-labels">
+        <span class="scale-label">No light</span>
+        <span class="scale-label">More light</span>
+      </div>
+    </div>
+    <p class="scale-source">Every night, a NASA satellite measures that upward glow across the globe. Those nightly readings get pooled into one image per year — keeping only the clearest, moonlight-free nights, filtering out clouds and sensor noise. NASA calls the resulting dataset Black Marble. Every map on this page draws from it.</p>
+    <p class="scale-label">Source: NASA Black Marble VNP46A2, VIIRS Day/Night Band.</p>
+  </div>
+</section>
 
 <main>
 
-    <section class="city-section">
+    <section class="city-section" id="berlin">
 
         <h2 class="city-title">Berlin</h2>
 
@@ -48,10 +172,6 @@
         <section id="mapContainer">
 
             <div id="overlay">
-
-                <div class="source">
-                    NASA BLACK MARBLE
-                </div>
 
                 <h2 id="mapDate">
                     2013
@@ -81,7 +201,7 @@
 
     </section>
 
-    <section class="city-section">
+    <section class="city-section" id="kyiv">
 
         <h2 class="city-title">Kyiv</h2>
 
@@ -90,10 +210,6 @@
         <section id="mapContainerKyiv">
 
             <div id="overlayKyiv">
-
-                <div class="source">
-                    NASA BLACK MARBLE
-                </div>
 
                 <h2 id="mapDateKyiv">
                     January 2014
@@ -123,7 +239,7 @@
 
     </section>
 
-    <section class="city-section">
+    <section class="city-section" id="detroit">
 
         <h2 class="city-title">Detroit, Michigan</h2>
 
@@ -132,10 +248,6 @@
         <section id="mapContainerDetroit">
 
             <div id="overlayDetroit">
-
-                <div class="source">
-                    NASA BLACK MARBLE
-                </div>
 
                 <h2 id="mapDateDetroit">
                     2014
@@ -165,7 +277,7 @@
 
     </section>
 
-    <section class="city-section">
+    <section class="city-section" id="paris">
 
         <h2 class="city-title">Paris, Île-de-France</h2>
 
@@ -174,10 +286,6 @@
         <section id="mapContainerParis">
 
             <div id="overlayParis">
-
-                <div class="source">
-                    NASA BLACK MARBLE
-                </div>
 
                 <h2 id="mapDateParis">
                     2013
@@ -207,66 +315,84 @@
 
     </section>
 
-    <section class="city-section no-timeline">
+    <section class="india-combined-section" id="india">
 
-        <h2 class="city-title">India: A Decade of Light</h2>
+      <h2 class="city-title">India</h2>
 
-        <p class="city-subtitle">2016 → 2025</p>
+      <p class="city-subtitle">A Decade of Light</p>
 
-        <p class="city-body">
-            India's electrification drive — one of the largest in human history — is visible from space. Drag the slider to reveal how hundreds of millions of new connections transformed the subcontinent's nighttime footprint over just nine years.
-        </p>
+      <div class="india-combined-layout">
 
-        <section id="mapContainerIndia">
+        <div class="india-combined-text">
+          <!-- India text block -->
+          <div class="india-text-block">
+            <p class="india-date">2016 → 2025</p>
+            <div class="india-divider"></div>
+            <p class="india-body">India's electrification drive — one of the largest in human history — is visible from space. Hundreds of millions of new connections transformed the subcontinent's nighttime footprint over just nine years.</p>
+          </div>
 
-            <div id="mapIndia"></div>
+          <!-- Year switcher -->
+          <div class="year-buttons">
+            <span class="year-btn active" onclick="switchIndiaGujaratYear(2016, this)">2016</span>
+            <span class="year-btn" onclick="switchIndiaGujaratYear(2025, this)">2025</span>
+          </div>
 
-            <div class="year-toggle">
-                <button type="button" class="year-toggle-btn active" id="indiaBtn2016" data-year="2016">2016</button>
-                <button type="button" class="year-toggle-btn" id="indiaBtn2025" data-year="2025">2025</button>
-            </div>
-
-        </section>
-
-        <div id="legendIndia">
-
-            <span id="legendLabelLeft">No Light</span>
-
-            <div id="legendBar"></div>
-
-            <span id="legendLabelRight">Bright City</span>
-
+          <!-- Gujarat text block -->
+          <div class="india-text-block gujarat-text-block">
+            <h2 class="india-title">Gujarat Coastal Corridor</h2>
+            <p class="india-subtitle">The Gulf of Khambhat</p>
+            <p class="india-date">2016 → 2025</p>
+            <div class="india-divider"></div>
+            <p class="india-body">Hugging India's northwestern coastline, this corridor traces the physical acceleration of industrial growth. Deepwater cargo hubs, petrochemical complexes and Special Economic Zones expanded relentlessly — captured in a 175% rise in nighttime radiance between 2016 and 2025.</p>
+          </div>
         </div>
 
-        <p class="city-note">
-            Data: NASA Black Marble VNP46A2 · 500m resolution · Annual median composite
-        </p>
+        <!-- Right column: image -->
+        <div class="india-img-container" id="india-img-container">
+          <img id="india-gujarat-img" src="images/India/India_Gujarat_2016.png" alt="India and Gujarat night lights" draggable="false"/>
+        </div>
 
+      </div>
     </section>
 
-    <section class="city-section subsection no-timeline">
+    <section class="city-section" id="permian">
 
-        <div class="subsection-label">ZOOM IN · GUJARAT COASTAL CORRIDOR</div>
+        <h2 class="city-title">Permian Basin, Texas</h2>
 
-        <h2 class="city-title">The Gulf of Khambhat</h2>
+        <p class="city-subtitle">Where the earth catches fire — first for oil, now for AI</p>
 
-        <p class="city-subtitle">Where supply chains leave their mark on the night sky</p>
+        <section id="mapContainerPermian">
 
-        <p class="city-body">
-            Hugging India's northwestern coastline, this corridor traces the physical acceleration of industrial growth. Deepwater cargo hubs, petrochemical complexes and Special Economic Zones expanded relentlessly — captured in a 175% rise in nighttime radiance between 2016 and 2025.
-        </p>
+            <div id="overlayPermian">
 
-        <section id="mapContainerGujarat">
-            <div id="mapGujarat"></div>
-            <div class="year-toggle">
-                <button type="button" class="year-toggle-btn active" id="gujaratBtn2016" data-year="2016">2016</button>
-                <button type="button" class="year-toggle-btn" id="gujaratBtn2025" data-year="2025">2025</button>
+                <h2 id="mapDatePermian">
+                    2013
+                </h2>
+
+                <div id="radiancePermian">
+                    — nW/cm²/sr
+                </div>
+
+            <p id="storyTextPermian">
+    Out in the plains of West Texas, satellite radiance climbed 262% as the shale oil boom took hold. Much of this early growth traces back to gas flaring — excess natural gas burned off at the wellhead — as drilling turned quiet ranchland into one of the fastest-growing oil regions in the world.
+</p>
+<p class="storyTextPermianSecond">
+    More recently, that same cheap gas has found a second use: powering AI. Chevron and Microsoft are building a 2.67-gigawatt data center running entirely on Permian gas, and OpenAI's Stargate campus nearby draws on the same supply network. On the map, Permian Basin doesn't just grow — it visibly catches fire, first for oil, now for AI.
+</p>
+
             </div>
+
+            <div id="mapPermian"></div>
+
+            <button id="permianPlayPause" aria-label="Play/Pause animation">⏸</button>
+
         </section>
 
-        <p class="city-note">
-            Data: NASA Black Marble · VNP46A2 · 300m resolution · Annual median composite · Gulf of Khambhat region
-        </p>
+        <section id="timelinePermian">
+
+            <svg id="chartPermian"></svg>
+
+        </section>
 
     </section>
 
@@ -275,6 +401,39 @@
 <script src="js/map.js"></script>
 <script src="js/graph.js"></script>
 <script src="js/story.js"></script>
+
+<script>
+function switchIndiaGujaratYear(year, btn) {
+  document.getElementById('india-gujarat-img').src = 'images/India/India_Gujarat_' + year + '.png';
+  document.querySelectorAll('#india .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Pan/drag on image container
+const imgContainer = document.getElementById('india-img-container');
+const imgEl = document.getElementById('india-gujarat-img');
+let isDragging = false, startX, startY, currentX = 0, currentY = 0;
+
+imgContainer.addEventListener('mousedown', e => {
+  isDragging = true;
+  startX = e.clientX - currentX;
+  startY = e.clientY - currentY;
+  imgContainer.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  imgContainer.style.cursor = 'grab';
+});
+
+document.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  e.preventDefault();
+  currentX = Math.max(-200, Math.min(200, e.clientX - startX));
+  currentY = 0;
+  imgEl.style.transform = `translate(${currentX}px, ${currentY}px)`;
+});
+</script>
 
 </body>
 

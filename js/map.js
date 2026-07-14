@@ -135,7 +135,9 @@ function addCityBoundary(mapInstance, geojsonPath, imageOverlayInstance, fallbac
 
 // Anchors a .boundary-label to the real east edge of a boundary layer so the
 // connector line touches the boundary and tracks it as the map pans/zooms.
-function attachBoundaryLabel(mapInstance, mapElementId, labelElementId, boundaryBounds){
+// clampToContainer keeps the label from being clipped when the anchor point
+// falls outside the visible map (e.g. Paris, whose boundary extends past the container edge).
+function attachBoundaryLabel(mapInstance, mapElementId, labelElementId, boundaryBounds, clampToContainer = false){
 
     const mapEl = document.getElementById(mapElementId);
     const labelEl = document.getElementById(labelElementId);
@@ -150,8 +152,22 @@ function attachBoundaryLabel(mapInstance, mapElementId, labelElementId, boundary
 
         const point = mapInstance.latLngToContainerPoint(anchorLatLng);
 
-        labelEl.style.left = `${point.x}px`;
-        labelEl.style.top = `${point.y}px`;
+        let x = point.x;
+        let y = point.y;
+
+        if(clampToContainer){
+
+            const margin = 16;
+            const maxX = Math.max(mapEl.clientWidth - labelEl.offsetWidth - margin, margin);
+            const maxY = Math.max(mapEl.clientHeight - margin, margin);
+
+            x = Math.min(Math.max(x, margin), maxX);
+            y = Math.min(Math.max(y, margin), maxY);
+
+        }
+
+        labelEl.style.left = `${x}px`;
+        labelEl.style.top = `${y}px`;
 
     }
 
@@ -616,7 +632,9 @@ function updateDetroitYear(index){
 const parisMap = L.map("mapParis", {
     zoomControl: false,
     attributionControl: false,
-    scrollWheelZoom: false
+    scrollWheelZoom: false,
+    zoomSnap: 0.1,
+    zoomDelta: 0.1
 });
 
 L.control.zoom({ position: "topright" }).addTo(parisMap);
@@ -630,7 +648,7 @@ L.tileLayer(
 ).addTo(parisMap);
 
 const parisBoundaryPane = parisMap.createPane("boundaryPane");
-parisBoundaryPane.style.zIndex = 450;
+parisBoundaryPane.style.zIndex = 550;
 parisBoundaryPane.style.pointerEvents = "none";
 
 const parisBounds = L.latLngBounds([
@@ -681,15 +699,54 @@ parisOverlay.once("load", function () {
 
 });
 
-parisMap.fitBounds(parisViewBounds);
-
 addCityBoundary(parisMap, "data/Paris_boundary.geojson", null, parisBounds, true, false, {
     color: "#cfe4ff",
-    weight: 2,
-    opacity: 0.5,
+    weight: 1.5,
+    opacity: 0.4,
     fillOpacity: 0
-}, false).then(boundaryBounds => {
-    attachBoundaryLabel(parisMap, "mapParis", "boundaryLabelParis", boundaryBounds);
+}, false).then(function(boundaryBounds) {
+
+    // Final view set after all overlays and the boundary layer are in place,
+    // and before any latLngToContainerPoint calls that need a valid view.
+    parisMap.setView([48.60, 2.40], 8.5);
+
+    if(boundaryBounds && boundaryBounds.isValid()) {
+
+        // Custom anchor near the lower-right of the boundary (rather than
+        // attachBoundaryLabel's default vertically-centered east edge) so the
+        // label's connector line touches the boundary near its southeast curve.
+        const parisLabelAnchor = [
+            boundaryBounds.getSouth() + (boundaryBounds.getNorth() - boundaryBounds.getSouth()) * 0.15,
+            boundaryBounds.getEast() - (boundaryBounds.getEast() - boundaryBounds.getWest()) * 0.08
+        ];
+
+        const parisLabelEl = document.getElementById("boundaryLabelParis");
+        const parisMapEl = document.getElementById("mapParis");
+
+        function updateParisLabelPosition(){
+
+            if(!parisLabelEl || !parisMapEl){
+                return;
+            }
+
+            const point = parisMap.latLngToContainerPoint(parisLabelAnchor);
+            const margin = 16;
+            const maxX = Math.max(parisMapEl.clientWidth - parisLabelEl.offsetWidth - margin, margin);
+            const maxY = Math.max(parisMapEl.clientHeight - margin, margin);
+
+            const x = Math.min(Math.max(point.x, margin), maxX);
+            const y = Math.min(Math.max(point.y, margin), maxY);
+
+            parisLabelEl.style.left = `${x}px`;
+            parisLabelEl.style.top = `${y}px`;
+
+        }
+
+        parisMap.on("move zoom", updateParisLabelPosition);
+        updateParisLabelPosition();
+
+    }
+
 });
 
 const parisMapDate = document.getElementById("mapDateParis");
@@ -761,169 +818,158 @@ function updateParisYear(index){
 
 }
 
-// ---------- India map ----------
+// ---------- Permian Basin map ----------
 
-const indiaMap = L.map("mapIndia", {
-    zoomControl: false,
-    attributionControl: false,
-    scrollWheelZoom: false
-});
-
-L.control.zoom({ position: "topright" }).addTo(indiaMap);
-
-L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    {
-        maxZoom:18,
-        pane: "tilePane"
-    }
-).addTo(indiaMap);
-
-const indiaBoundaryPane = indiaMap.createPane("boundaryPane");
-indiaBoundaryPane.style.zIndex = 450;
-indiaBoundaryPane.style.pointerEvents = "none";
-
-const indiaBounds = L.latLngBounds([
-
-    [6.756296109978467,68.1793251401011],
-    [33.1708291236821,97.1670581391707]
-
-]);
-
-let indiaOverlay2016 = L.imageOverlay(
-    "images/India/India_2016.png",
-    indiaBounds,
-    {
-        opacity:1
-    }
-).addTo(indiaMap);
-
-let indiaOverlay2025 = L.imageOverlay(
-    "images/India/India_2025.png",
-    indiaBounds,
-    {
-        opacity:0
-    }
-).addTo(indiaMap);
-
-indiaOverlay2016.once("load", function () {
-
-    indiaOverlay2016.getElement().style.mixBlendMode = "normal";
-    indiaOverlay2016.getElement().style.maskImage = "none";
-    indiaOverlay2016.getElement().style.webkitMaskImage = "none";
-
-});
-
-indiaOverlay2025.once("load", function () {
-
-    indiaOverlay2025.getElement().style.mixBlendMode = "normal";
-    indiaOverlay2025.getElement().style.maskImage = "none";
-    indiaOverlay2025.getElement().style.webkitMaskImage = "none";
-
-});
-
-indiaMap.fitBounds(indiaBounds);
-
-addCityBoundary(indiaMap, "data/India_boundary.geojson", null, indiaBounds, true).then(() => {
-
-    indiaOverlay2016.setBounds(indiaBounds);
-    indiaOverlay2025.setBounds(indiaBounds);
-
-});
-
-// ---------- India year toggle ----------
-
-const indiaBtn2016 = document.getElementById("indiaBtn2016");
-const indiaBtn2025 = document.getElementById("indiaBtn2025");
-
-function setIndiaYear(year){
-
-    const showLater = year === "2025";
-
-    indiaOverlay2016.setOpacity(showLater ? 0 : 1);
-    indiaOverlay2025.setOpacity(showLater ? 1 : 0);
-
-    if(indiaBtn2016) indiaBtn2016.classList.toggle("active", !showLater);
-    if(indiaBtn2025) indiaBtn2025.classList.toggle("active", showLater);
-
-}
-
-if(indiaBtn2016){
-    indiaBtn2016.addEventListener("click", () => setIndiaYear("2016"));
-}
-
-if(indiaBtn2025){
-    indiaBtn2025.addEventListener("click", () => setIndiaYear("2025"));
-}
-
-setIndiaYear("2016");
-
-// ---------- Gujarat map ----------
-
-// --- GUJARAT MAP ---
-const gujaratMap = L.map("mapGujarat", {
+const permianMap = L.map("mapPermian", {
     zoomControl: false,
     attributionControl: false,
     scrollWheelZoom: false,
     zoomSnap: 0.1,
-    zoomDelta: 0.1
+    zoomDelta: 1
 });
 
-L.control.zoom({ position: "topright" }).addTo(gujaratMap);
+L.control.zoom({ position: "topright" }).addTo(permianMap);
 
 L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-    { maxZoom: 18 }
-).addTo(gujaratMap);
+    {
+        maxZoom:18,
+        pane: "tilePane"
+    }
+).addTo(permianMap);
 
-const gujaratBounds = L.latLngBounds([
-    [21.00, 72.00],
-    [22.50, 73.20]
+const permianBounds = L.latLngBounds([
+
+    [30.50, -105.20],
+    [33.80, -100.10]
+
 ]);
 
-// 2016 layer — starts fully visible
-let gujarat2016 = L.imageOverlay(
-    "images/Gujarat/Gujarat_2016.png",
-    gujaratBounds,
-    { opacity: 0.85, className: "city-overlay-sharp" }
-).addTo(gujaratMap);
+let permianGlowWideOverlay = L.imageOverlay(
+    "images/Permian/Permian_2013.png",
+    permianBounds,
+    {
+        opacity:0.5,
+        className:"glow-overlay-wide"
+    }
+).addTo(permianMap);
 
-// 2025 layer — starts invisible, fades in on scroll
-let gujarat2025 = L.imageOverlay(
-    "images/Gujarat/Gujarat_2025.png",
-    gujaratBounds,
-    { opacity: 0, className: "city-overlay-sharp" }
-).addTo(gujaratMap);
+let permianGlowOverlay = L.imageOverlay(
+    "images/Permian/Permian_2013.png",
+    permianBounds,
+    {
+        opacity:0.7,
+        className:"glow-overlay"
+    }
+).addTo(permianMap);
 
-gujarat2016.once("load", function() {
-    gujarat2016.getElement().style.mixBlendMode = "screen";
+let permianOverlay = L.imageOverlay(
+    "images/Permian/Permian_2013.png",
+    permianBounds,
+    {
+        opacity:0.9,
+        className:"city-overlay-sharp"
+    }
+).addTo(permianMap);
+
+permianOverlay.once("load", function () {
+
+    permianOverlay.getElement().style.mixBlendMode = "screen";
+
 });
-gujarat2025.once("load", function() {
-    gujarat2025.getElement().style.mixBlendMode = "screen";
+
+permianMap.setView([32.15, -104.20], 7);
+
+const permianCityLabels = [
+    { name: "Midland", coords: [31.9874, -102.01] },
+    { name: "Odessa", coords: [31.8157, -102.3676] },
+    { name: "Lubbock", coords: [33.6779, -101.7552] },
+    { name: "Carlsbad", coords: [32.6207, -104.6288] },
+    { name: "Pecos", coords: [31.4229, -103.2932] }
+];
+
+permianCityLabels.forEach(city => {
+
+    L.marker(city.coords, {
+        icon: L.divIcon({
+            className: "permian-city-label",
+            html: city.name,
+            iconSize: null
+        }),
+        interactive: false
+    }).addTo(permianMap);
+
 });
 
-gujaratMap.fitBounds(gujaratBounds);
+const permianMapDate = document.getElementById("mapDatePermian");
+const permianRadiance = document.getElementById("radiancePermian");
+const permianPlayPauseBtn = document.getElementById("permianPlayPause");
 
-// --- CLICK-DRIVEN CROSSFADE ---
-// Clicking a year button crossfades to that year and highlights the active button
-const gujaratBtn2016 = document.getElementById("gujaratBtn2016");
-const gujaratBtn2025 = document.getElementById("gujaratBtn2025");
+// Move the play/pause button inline next to the year label (top-left overlay)
+const permianYearLabel = document.createElement("span");
+permianYearLabel.textContent = permianMapDate.textContent.trim();
+permianMapDate.textContent = "";
+permianMapDate.appendChild(permianYearLabel);
+permianMapDate.appendChild(permianPlayPauseBtn);
 
-function setGujaratYear(year) {
-    const showLater = year === "2025";
+let permianRadianceData=[];
 
-    gujarat2016.setOpacity(showLater ? 0 : 0.85);
-    gujarat2025.setOpacity(showLater ? 0.85 : 0);
+d3.csv("data/Permian_Radiance_2013_2025.csv").then(data=>{
 
-    if (gujaratBtn2016) gujaratBtn2016.classList.toggle("active", !showLater);
-    if (gujaratBtn2025) gujaratBtn2025.classList.toggle("active", showLater);
+    data.forEach(d=>{
+
+        d.radiance=+d.radiance;
+
+    });
+
+    permianRadianceData=data;
+
+});
+
+// ---------- Permian Basin auto-play animation ----------
+
+const permianYears = [2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+let permianIndex = 0;
+let permianPlaying = true;
+let permianInterval = null;
+
+function updatePermianYear(index) {
+  const year = permianYears[index];
+  const url = `images/Permian/Permian_${year}.png`;
+  permianOverlay.setUrl(url);
+  permianGlowOverlay.setUrl(url);
+  permianGlowWideOverlay.setUrl(url);
+  setTextContent(permianYearLabel, String(year));
+  if (permianRadianceData.length) {
+    const val = permianRadianceData[index];
+    setTextContent(
+      permianRadiance,
+      val ? val.radiance.toFixed(2) + " nW/cm²/sr" : "—"
+    );
+  }
+  updatePermianChartIndicator(index);
 }
 
-if (gujaratBtn2016) {
-    gujaratBtn2016.addEventListener("click", () => setGujaratYear("2016"));
-}
-if (gujaratBtn2025) {
-    gujaratBtn2025.addEventListener("click", () => setGujaratYear("2025"));
+function startPermianAnimation() {
+  permianInterval = setInterval(function() {
+    permianIndex = (permianIndex + 1) % permianYears.length;
+    updatePermianYear(permianIndex);
+  }, 500); // half a second per frame
 }
 
-setGujaratYear("2016");
+function stopPermianAnimation() {
+  clearInterval(permianInterval);
+}
+
+permianPlayPauseBtn.addEventListener('click', function() {
+  permianPlaying = !permianPlaying;
+  this.textContent = permianPlaying ? '⏸' : '▶';
+  if (permianPlaying) {
+    startPermianAnimation();
+  } else {
+    stopPermianAnimation();
+  }
+});
+
+startPermianAnimation();
+

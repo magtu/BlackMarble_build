@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gujarat Export</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 3840px; height: 2160px; overflow: auto; background: #00ff00; }
+  #export-map { width: 3840px; height: 2160px; background: #00ff00; }
+  .leaflet-container { background: #00ff00 !important; }
+
+  /* Applied via className at creation time (not after "load") so the blend
+     mode is guaranteed to be present even if the image loads from cache
+     before a load-event listener would have attached. */
+  .overlay-blend { mix-blend-mode: lighten; }
+
+  /* Year switcher UI */
+  #switcher {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    padding: 16px 32px;
+    border-radius: 8px;
+  }
+  .yr-btn {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: #6a88b8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .yr-btn.active {
+    color: #ffffcc;
+    border-bottom: 3px solid #ffffcc;
+  }
+</style>
+</head>
+<body>
+
+<div id="export-map"></div>
+
+<div id="switcher">
+  <button class="yr-btn active" onclick="showYear(2016, this)">2016</button>
+  <button class="yr-btn" onclick="showYear(2025, this)">2025</button>
+</div>
+
+<script>
+  const exportMap = L.map("export-map", {
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+    boxZoom: false,
+    keyboard: false
+  });
+
+  // Dark basemap — same CARTO dark_all style used behind the Paris map,
+  // sits behind the satellite overlay.
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18
+  }).addTo(exportMap);
+
+  const gujaratBounds = L.latLngBounds([[21.00, 72.00], [22.50, 73.20]]);
+  exportMap.fitBounds(gujaratBounds, { padding: [60, 60] });
+
+  // PNG overlays — className applies mix-blend-mode:lighten immediately,
+  // so the black background merges into the dark basemap with no visible edge.
+  const overlay2016 = L.imageOverlay('images/Gujarat/Gujarat_2016.png', gujaratBounds, { opacity: 1, className: 'overlay-blend' });
+  const overlay2025 = L.imageOverlay('images/Gujarat/Gujarat_2025.png', gujaratBounds, { opacity: 1, className: 'overlay-blend' });
+  overlay2016.addTo(exportMap);
+
+  function showYear(year, btn) {
+    if (year === 2016) {
+      exportMap.removeLayer(overlay2025);
+      overlay2016.addTo(exportMap);
+    } else {
+      exportMap.removeLayer(overlay2016);
+      overlay2025.addTo(exportMap);
+    }
+    document.querySelectorAll('.yr-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Boundary — no Gujarat/regional GeoJSON exists in data/, so this draws a
+  // plain rectangle at gujaratBounds as a placeholder (not a real coastline shape).
+  const boundaryPane = exportMap.createPane("boundaryPane");
+  boundaryPane.style.zIndex = 450;
+  boundaryPane.style.pointerEvents = "none";
+
+  L.rectangle(gujaratBounds, {
+    pane: "boundaryPane",
+    color: "#cfe4ff",
+    weight: 1.5,
+    opacity: 0.15,
+    fillOpacity: 0
+  }).addTo(exportMap);
+</script>
+
+</body>
+</html>

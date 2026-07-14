@@ -1,0 +1,147 @@
+tml<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>India Export</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 3840px; height: 2160px; overflow: auto; background: #00ff00; }
+  #export-map { width: 3840px; height: 2160px; background: #00ff00; }
+  .leaflet-container { background: #00ff00 !important; }
+
+  /* Year switcher UI */
+  #switcher {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    padding: 16px 32px;
+    border-radius: 8px;
+  }
+  .yr-btn {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: #6a88b8;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .yr-btn.active {
+    color: #ffffcc;
+    border-bottom: 3px solid #ffffcc;
+  }
+
+  /* City labels — DivIcon, rendered inside map pane */
+  .city-label-div {
+    background: transparent;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    color: #c8d8f8;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    text-shadow: 0 0 8px #000, 0 0 4px #000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .city-label-div .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c8d8f8;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="export-map"></div>
+
+<div id="switcher">
+  <button class="yr-btn active" onclick="showYear(2016, this)">2016</button>
+  <button class="yr-btn" onclick="showYear(2025, this)">2025</button>
+</div>
+
+<script>
+  const exportMap = L.map("export-map", {
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+    boxZoom: false,
+    keyboard: false
+  });
+
+  const indiaBounds = L.latLngBounds([[6.75, 68.17], [33.17, 97.16]]);
+  exportMap.fitBounds(indiaBounds, { padding: [60, 60] });
+
+  // PNG overlays
+  const overlay2016 = L.imageOverlay('images/India/India_2016.png', indiaBounds, { opacity: 1 });
+  const overlay2025 = L.imageOverlay('images/India/India_2025.png', indiaBounds, { opacity: 1 });
+  overlay2016.addTo(exportMap);
+
+  function showYear(year, btn) {
+    if (year === 2016) {
+      exportMap.removeLayer(overlay2025);
+      overlay2016.addTo(exportMap);
+    } else {
+      exportMap.removeLayer(overlay2016);
+      overlay2025.addTo(exportMap);
+    }
+    document.querySelectorAll('.yr-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Boundary
+  const boundaryPane = exportMap.createPane("boundaryPane");
+  boundaryPane.style.zIndex = 450;
+  boundaryPane.style.pointerEvents = "none";
+
+  fetch("data/India_boundary.geojson")
+    .then(r => r.json())
+    .then(data => {
+      data.features = data.features.map(f => {
+        if (f.geometry && f.geometry.type === "GeometryCollection") {
+          f.geometry.geometries = f.geometry.geometries.filter(
+            g => g.type !== "Point" && g.type !== "MultiPoint"
+          );
+        }
+        return f;
+      });
+      L.geoJSON(data, {
+        pane: "boundaryPane",
+        filter: f => f.geometry && f.geometry.type !== "Point" && f.geometry.type !== "MultiPoint",
+        style: { color: "#cfe4ff", weight: 1.5, opacity: 0.15, fillOpacity: 0 }
+      }).addTo(exportMap);
+    });
+
+  // City labels as DivIcon — rendered inside map, always aligned
+  const cities = [
+    { name: "Delhi",   lat: 28.6139, lng: 77.2090 },
+    { name: "Mumbai",  lat: 19.0760, lng: 72.8777 },
+    { name: "Kolkata", lat: 22.5726, lng: 88.3639 },
+    { name: "Chennai", lat: 13.0827, lng: 80.2707 }
+  ];
+
+  cities.forEach(city => {
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="city-label-div"><div class="dot"></div>${city.name}</div>`,
+      iconAnchor: [0, 8],
+      iconSize: null
+    });
+    L.marker([city.lat, city.lng], { icon, interactive: false }).addTo(exportMap);
+  });
+</script>
+
+</body>
+</html>
