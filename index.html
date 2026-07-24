@@ -163,42 +163,86 @@
 
 <main>
 
-    <section class="city-section" id="berlin">
+    <section class="city-section" id="permian">
 
-        <h2 class="city-title">Berlin</h2>
+        <h2 class="city-title">Permian Basin, Texas</h2>
 
-        <p class="city-subtitle">The changing rhythm of a growing European capital</p>
+        <p class="city-subtitle">Where the earth catches fire — first for oil, now for AI</p>
 
-        <section id="mapContainer">
+        <section id="mapContainerPermian">
 
-            <div id="overlay">
+            <div id="overlayPermian">
 
-                <h2 id="mapDate">
+                <h2 id="mapDatePermian">
                     2013
                 </h2>
 
-                <div id="radiance">
+                <div id="radiancePermian">
                     — nW/cm²/sr
                 </div>
 
-                <p id="storyText">
-                    Move through the timeline below to explore Berlin's changing nighttime landscape.
-                </p>
+            <p id="storyTextPermian">
+    Out in the plains of West Texas, satellite radiance surged as the shale oil boom took hold. A decade of horizontal drilling and fracking turned quiet ranchland into one of the fastest-growing oil regions on Earth. That climb wasn't uninterrupted: in 2020, oil prices collapsed as COVID-19 crushed global demand, and rigs across the Permian went idle almost overnight, a brief but sharp dip before drilling roared back. Much of that new light traces back to gas flaring, excess natural gas burned off at the wellhead instead of captured, an economic and environmental signal energy researchers have tracked for years.
+</p>
+<p class="storyTextPermianSecond">
+    More recently, that same cheap gas has found a second use: powering AI. Chevron and Microsoft are building a 2.67-gigawatt data center running entirely on Permian gas, and OpenAI's Stargate campus draws on the same supply network. On the map, Permian Basin doesn't just grow. It visibly catches fire, first for oil, now for AI.
+</p>
 
             </div>
 
-            <div class="boundary-label" id="boundaryLabelBerlin">Berlin city limits</div>
+            <div id="mapPermian"></div>
 
-            <div id="map"></div>
-
-        </section>
-
-        <section id="timeline">
-
-            <svg id="chart"></svg>
+            <button id="permianPlayPause" aria-label="Play/Pause animation">⏸</button>
 
         </section>
 
+        <section id="timelinePermian">
+
+            <svg id="chartPermian"></svg>
+
+        </section>
+
+    </section>
+
+    <section class="india-combined-section" id="india">
+
+      <h2 class="city-title">India</h2>
+
+      <p class="city-subtitle">A Decade of Light</p>
+
+      <div class="india-combined-layout">
+
+        <div class="india-combined-text">
+          <!-- India text block -->
+          <div class="india-text-block">
+            <p class="india-date">2016 → 2025</p>
+            <div class="india-divider"></div>
+            <p class="india-body">In 2016, large parts of rural India were still dark after sunset. By 2025, much of that darkness had been switched on. Government electrification schemes launched from 2014 onward brought grid power to tens of thousands of villages, and a later push connected nearly 29 million rural households that had never had electricity before. The International Energy Agency has pointed to 2018 alone as a year in which India connected close to 100 million people, a pace on par with what it would take to close all of sub-Saharan Africa's electricity gap by 2030.</p>
+            <p class="india-body">Independent researchers note that the government's later declaration of "100% household electrification" leaned on some generous redefinitions, and pockets of rural India still go without reliable power. But the two satellite images, nine years apart, tell the broad story clearly: hundreds of millions of people went from candlelight and kerosene lamps to a lit home in less than a decade.</p>
+          </div>
+
+          <!-- Year switcher -->
+          <div class="year-buttons">
+            <span class="year-btn active" onclick="switchIndiaGujaratYear(2016, this)">2016</span>
+            <span class="year-btn" onclick="switchIndiaGujaratYear(2025, this)">2025</span>
+          </div>
+
+          <!-- Gujarat text block -->
+          <div class="india-text-block gujarat-text-block">
+            <h2 class="india-title">Gujarat Coastal Corridor</h2>
+            <p class="india-subtitle">The Gulf of Khambhat</p>
+            <p class="india-date">2016 → 2025</p>
+            <div class="india-divider"></div>
+            <p class="india-body">Hugging India's western coastline, the Gulf of Khambhat traces the physical acceleration of industrial growth. Dahej, a deep-water port built specifically for chemicals and hazardous cargo, has become India's first dedicated chemical port and now anchors one of the country's largest Petroleum, Chemicals and Petrochemicals Investment Regions, hosting major players like Reliance, ONGC, GAIL, and Adani. Nearby Hazira handles LNG and container traffic feeding Gujarat's industrial hinterland. Together with expanding Special Economic Zones along the coast, this stretch of shoreline has been quietly building itself into one of India's most concentrated industrial engines.</p>
+          </div>
+        </div>
+
+        <!-- Right column: image -->
+        <div class="india-img-container" id="india-img-container">
+          <img id="india-gujarat-img" src="images/India/India_Gujarat_2016.png" alt="India and Gujarat night lights" draggable="false"/>
+        </div>
+
+      </div>
     </section>
 
     <section class="city-section" id="kyiv">
@@ -234,6 +278,44 @@
         <section id="timelineKyiv">
 
             <svg id="chartKyiv"></svg>
+
+        </section>
+
+    </section>
+
+    <section class="city-section" id="berlin">
+
+        <h2 class="city-title">Berlin</h2>
+
+        <p class="city-subtitle">The changing rhythm of a growing European capital</p>
+
+        <section id="mapContainer">
+
+            <div id="overlay">
+
+                <h2 id="mapDate">
+                    2013
+                </h2>
+
+                <div id="radiance">
+                    — nW/cm²/sr
+                </div>
+
+                <p id="storyText">
+                    Move through the timeline below to explore Berlin's changing nighttime landscape.
+                </p>
+
+            </div>
+
+            <div class="boundary-label" id="boundaryLabelBerlin">Berlin city limits</div>
+
+            <div id="map"></div>
+
+        </section>
+
+        <section id="timeline">
+
+            <svg id="chart"></svg>
 
         </section>
 
@@ -315,88 +397,43 @@
 
     </section>
 
-    <section class="india-combined-section" id="india">
-
-      <h2 class="city-title">India</h2>
-
-      <p class="city-subtitle">A Decade of Light</p>
-
-      <div class="india-combined-layout">
-
-        <div class="india-combined-text">
-          <!-- India text block -->
-          <div class="india-text-block">
-            <p class="india-date">2016 → 2025</p>
-            <div class="india-divider"></div>
-            <p class="india-body">India's electrification drive — one of the largest in human history — is visible from space. Hundreds of millions of new connections transformed the subcontinent's nighttime footprint over just nine years.</p>
-          </div>
-
-          <!-- Year switcher -->
-          <div class="year-buttons">
-            <span class="year-btn active" onclick="switchIndiaGujaratYear(2016, this)">2016</span>
-            <span class="year-btn" onclick="switchIndiaGujaratYear(2025, this)">2025</span>
-          </div>
-
-          <!-- Gujarat text block -->
-          <div class="india-text-block gujarat-text-block">
-            <h2 class="india-title">Gujarat Coastal Corridor</h2>
-            <p class="india-subtitle">The Gulf of Khambhat</p>
-            <p class="india-date">2016 → 2025</p>
-            <div class="india-divider"></div>
-            <p class="india-body">Hugging India's northwestern coastline, this corridor traces the physical acceleration of industrial growth. Deepwater cargo hubs, petrochemical complexes and Special Economic Zones expanded relentlessly — captured in a 175% rise in nighttime radiance between 2016 and 2025.</p>
-          </div>
-        </div>
-
-        <!-- Right column: image -->
-        <div class="india-img-container" id="india-img-container">
-          <img id="india-gujarat-img" src="images/India/India_Gujarat_2016.png" alt="India and Gujarat night lights" draggable="false"/>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="city-section" id="permian">
-
-        <h2 class="city-title">Permian Basin, Texas</h2>
-
-        <p class="city-subtitle">Where the earth catches fire — first for oil, now for AI</p>
-
-        <section id="mapContainerPermian">
-
-            <div id="overlayPermian">
-
-                <h2 id="mapDatePermian">
-                    2013
-                </h2>
-
-                <div id="radiancePermian">
-                    — nW/cm²/sr
-                </div>
-
-            <p id="storyTextPermian">
-    Out in the plains of West Texas, satellite radiance climbed 262% as the shale oil boom took hold. Much of this early growth traces back to gas flaring — excess natural gas burned off at the wellhead — as drilling turned quiet ranchland into one of the fastest-growing oil regions in the world.
-</p>
-<p class="storyTextPermianSecond">
-    More recently, that same cheap gas has found a second use: powering AI. Chevron and Microsoft are building a 2.67-gigawatt data center running entirely on Permian gas, and OpenAI's Stargate campus nearby draws on the same supply network. On the map, Permian Basin doesn't just grow — it visibly catches fire, first for oil, now for AI.
-</p>
-
-            </div>
-
-            <div id="mapPermian"></div>
-
-            <button id="permianPlayPause" aria-label="Play/Pause animation">⏸</button>
-
-        </section>
-
-        <section id="timelinePermian">
-
-            <svg id="chartPermian"></svg>
-
-        </section>
-
-    </section>
-
 </main>
+
+<section class="closing-section">
+  <div class="closing-col">
+
+    <p class="closing-p">
+      Every map on this page starts here — with a small family of NASA-NOAA satellites that circle the Earth from pole to pole, passing over nearly the same spot every night. It began with Suomi NPP, launched in 2011, and continues today with JPSS-1 and JPSS-2. Together they carry an instrument called VIIRS, and specifically its Day/Night Band, a sensor sensitive enough to catch faint light sources like streetlights, even under moonlight.
+    </p>
+
+    <figure class="closing-diagram">
+      <img src="images/2023-12_noaa-21-schematic-diagram.jpg" alt="NOAA-21 satellite schematic showing OMPS, ATMS, CrIS, and VIIRS instruments" />
+      <figcaption>The JPSS satellite carries VIIRS, whose Day/Night Band produces the imagery in this project. &nbsp;·&nbsp; Source: NOAA / NASA</figcaption>
+    </figure>
+
+    <p class="closing-p">
+      One quirk worth knowing: this sensor sees light differently than our eyes do — more sensitive toward red and near-infrared than blue. It's why modern blue-skewing LEDs (see: Detroit) can look dimmer from space than they really are, and why snow-covered nights (see: Berlin) need their own correction before they're counted as real light.
+    </p>
+
+    <div class="closing-gap-lg"></div>
+
+    <p class="closing-p">
+      This project was inspired by <a class="paper-link" href="https://www.nature.com/articles/s41586-026-10260-w" target="_blank" rel="noopener">Satellite imagery reveals increasing volatility in human night-time activity</a> (Li et al., Nature, 2026) — a paper that used the same Black Marble dataset to show that Earth's night lights aren't steadily brightening but constantly, simultaneously brightening and dimming across the globe. Kyiv, Paris, and the Permian Basin were among its own case studies.
+    </p>
+
+    <div class="closing-gap-md"></div>
+
+    <div class="colophon-eyebrow">Tools &amp; data behind this project</div>
+    <div class="colophon-list">
+      <div><span class="colophon-label">Dataset</span>NASA Black Marble (VIIRS Day/Night Band), Suomi NPP / JPSS satellites</div>
+      <div><span class="colophon-label">Processing</span>Google Earth Engine</div>
+      <div><span class="colophon-label">Verification</span>lightpollutionmap.info, for independent cross-checking of radiance trends</div>
+      <div><span class="colophon-label">Development</span>Visual Studio Code</div>
+      <div><span class="colophon-label">Hosting</span>GitHub Pages</div>
+    </div>
+
+  </div>
+</section>
 
 <script src="js/map.js"></script>
 <script src="js/graph.js"></script>

@@ -5,7 +5,7 @@
 const berlinStories = {
 
     "2013":
-        "NASA's Black Marble captures Berlin's nighttime glow at the start of a decade of transformation. The city burns with the amber warmth of sodium streetlights.",
+        "While Kyiv's lights were going dark, Berlin's were quietly filling with the people fleeing that same war. In February 2022, Berlin's main train station turned into an improvised refugee hub, with packed trains arriving from Poland every couple of hours carrying Ukrainian families escaping the invasion. The city's mayor pledged beds for 20,000 people, and thousands of ordinary Berliners opened their own homes to strangers. But that same year, a second force was pulling the other way: facing the same European energy crisis triggered by the war, Berlin switched off illumination on the Brandenburg Gate, the Victory Column, and other landmarks. Move through the timeline to see how these two forces, one filling the city with new light, one deliberately dimming it, played out year by year.",
 
     "2015":
         "Berlin begins one of Europe's largest LED streetlight conversion programmes. The VIIRS satellite is largely blind to the blue spectrum of LED light — so the data will soon tell a misleading story.",
@@ -36,74 +36,74 @@ const berlinStories = {
 const kyivStories = {
 
     "2013":
-        "Kyiv glows as a vibrant European capital. The Black Marble satellite records the city at its peacetime baseline — a warm, steady light across the Dnipro river.",
+        "Kyiv's lights climbed steadily for years, the normal hum of a growing capital.",
 
     "2014":
-        "The Euromaidan revolution culminates in February. Ukraine's political landscape shifts permanently. The satellite records no change in light — but the city has changed forever.",
+        "Then, in 2022, the line breaks.",
 
     "2018":
-        "Kyiv continues to develop and modernise. Nighttime radiance climbs steadily as the city grows. No one knows what is coming.",
+        "Russia's invasion brought repeated, deliberate strikes on Ukraine's power plants and grid.",
 
     "2021":
-        "The last full year of peace. Kyiv's lights burn at their brightest in the satellite record.",
+        "Between February 2022 and May 2024, a total of 18 large-scale power plants were damaged or destroyed, along with hundreds of boiler houses and heating points and hundreds of kilometers of district heating pipes.",
 
     "2022":
-        "On February 24th, Russia launches its full-scale invasion. Millions flee. Air raid sirens replace traffic noise. The satellite begins to record something it has never seen before.",
+        "By November 2022, Ukraine's grid operator reported that roughly 40% of the country was experiencing difficulties from damage to major energy hubs.",
 
     "2023":
-        "Systematic attacks on Ukraine's energy infrastructure plunge Kyiv into rolling blackouts. At times, the city receives only four hours of electricity per day. The darkness is visible from space.",
+        "The result was a sharp drop in Kyiv's satellite light, not because people left, but because the power simply wasn't there.",
 
     "2024":
-        "Ukraine's grid engineers work around the clock to restore power. Distributed generation and international support begin to stabilise supply. The lights slowly return.",
+        "Rolling blackouts, candlelit apartments, and city-run charging stations became part of daily life.",
 
     "2025":
-        "Kyiv endures. The radiance curve — scarred by war, dimmed by blackouts, climbing toward recovery — is one of the most extraordinary records in the history of nighttime satellite observation."
+        "Rolling blackouts, candlelit apartments, and city-run charging stations became part of daily life."
 
 };
 
 const detroitStories = {
 
     "2014":
-        "Detroit's 88,000 sodium streetlights cast an orange glow visible from space. Over 40% were broken — the city was going dark.",
+        "Detroit captures a technological paradox: a city that got measurably safer and better lit in real life while looking dimmer from space. After the city's 2013 bankruptcy, nearly half its 88,000 streetlights had failed, leaving whole neighborhoods dark.",
 
     "2015":
-        "The Public Lighting Authority begins replacing sodium lights with LEDs neighborhood by neighborhood. Residential streets are converted first.",
+        "A massive project that followed replaced 65,000 of them with precise LED fixtures, completed in December 2016.",
 
     "2016":
-        "All 65,000 LED streetlights are installed — completing one of the largest urban relighting projects in US history. The satellite records a sharp drop in radiance.",
+        "The shielded, cutoff optics on the new lights genuinely reduced wasted upward skyglow, a real improvement.",
 
     "2017":
-        "The drop is real in the data — but misleading. LEDs emit blue-spectrum light that VIIRS cannot detect. The city is brighter than ever to human eyes.",
+        "But the satellite's sensor is simply less sensitive to the blue-white light LEDs emit than it was to the old orange sodium bulbs, exaggerating the apparent drop in the data.",
 
     "2018":
-        "A new baseline is established. Detroit's nighttime radiance stabilizes at a lower satellite reading — not because the city is darker, but because the sensor is blind to LED light.",
+        "Detroit didn't go dark. The satellite just stopped seeing it as clearly.",
 
     "2022":
-        "A decade after bankruptcy, Detroit's reliable, energy-efficient lighting system saves $2.9 million annually — invisible to the satellite, visible to its residents."
+        "The story isn't finished either: the original rollout focused on main corridors and left many residential blocks still dark, and in 2026 the city launched a new initiative to fill in those mid-block gaps, block by block, based on resident input."
 
 };
 
 const parisStories = {
 
     "2013":
-        "France's first lights-off decree takes effect. Shops, offices and building facades must switch off by 1am — saving the equivalent of 750,000 households' annual electricity consumption.",
+        "In contrast to industrial boomtowns, Paris shows a light signature in retreat.",
 
     "2014":
-        "The first full year under the new law. Satellite data begins to register a measurable shift in Paris's nighttime footprint.",
+        "This wasn't decline.",
 
     "2016":
-        "Light pollution across Île-de-France continues its gradual decline as compliance with the 2013 decree becomes widespread.",
+        "It was policy.",
 
     "2019":
-        "A landmark new decree takes effect on January 1st — described as among the most progressive light pollution laws in western Europe. Outdoor lighting curfews, upward light limits, and monument lighting restrictions all tighten.",
+        "Facing Europe's energy crisis after Russia cut gas supplies following its invasion of Ukraine, Paris moved to switch off the Eiffel Tower's lights more than an hour early, at 11:45 p.m. instead of 1 a.m., once the last visitor had left.",
 
     "2020":
-        "The first full year under the 2019 decree. The satellite records one of the sharpest year-on-year drops in the entire dataset.",
+        "\"It's a highly symbolic gesture, part of the growing awareness around energy sobriety,\" said Jean-François Martins, head of the tower's management.",
 
     "2022":
-        "Paris consolidates its position as a model for light pollution reduction in Europe. The night sky over Île-de-France is measurably darker than a decade ago.",
+        "Shops, government buildings, and monuments across the city followed the same logic, part of a continent-wide scramble as countries braced for what one European energy minister called winters that \"will be terrible if nothing is done.\"",
 
     "2025":
-        "More than a decade after the first decree, Paris demonstrates that a major world city can reduce light pollution without sacrificing safety, beauty, or economic vitality."
+        "What began as an emergency measure has, in many French towns, become permanent, driven now as much by concern for nocturnal wildlife as by energy bills."
 
 };

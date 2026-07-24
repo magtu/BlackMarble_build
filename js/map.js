@@ -227,6 +227,8 @@ overlay.once("load", function () {
 
 map.setView([52.507, 13.425], 9.5);
 
+map.panBy([-60, 0], { animate: false });
+
 addCityBoundary(map, "data/Berlin_boundaries.geojson", null, bounds, true, false, {
     color: "#cfe4ff",
     weight: 1,
