@@ -36,28 +36,25 @@ const berlinStories = {
 const kyivStories = {
 
     "2013":
-        "Kyiv's lights climbed steadily for years, the normal hum of a growing capital.",
-
-    "2014":
-        "Then, in 2022, the line breaks.",
+        "Kyiv glows as a vibrant European capital. The Black Marble satellite records the city at its peacetime baseline — a warm, steady light across the Dnipro river.",
 
     "2018":
-        "Russia's invasion brought repeated, deliberate strikes on Ukraine's power plants and grid.",
+        "Kyiv continues to develop and modernise. Nighttime radiance climbs steadily as the city grows. No one knows what is coming.",
 
     "2021":
-        "Between February 2022 and May 2024, a total of 18 large-scale power plants were damaged or destroyed, along with hundreds of boiler houses and heating points and hundreds of kilometers of district heating pipes.",
+        "Kyiv's lights climbed steadily for years, the normal hum of a growing capital. Then, in 2022, the line breaks. Russia's invasion brought repeated, deliberate strikes on Ukraine's power plants and grid. Between February 2022 and May 2024, a total of 18 large-scale power plants were damaged or destroyed, along with hundreds of boiler houses and heating points and hundreds of kilometers of district heating pipes. By November 2022, Ukraine's grid operator reported that roughly 40% of the country was experiencing difficulties from damage to major energy hubs. The result was a sharp drop in Kyiv's satellite light, not because people left, but because the power simply wasn't there. Rolling blackouts, candlelit apartments, and city-run charging stations became part of daily life.",
 
     "2022":
-        "By November 2022, Ukraine's grid operator reported that roughly 40% of the country was experiencing difficulties from damage to major energy hubs.",
+        "On February 24th, Russia launches its full-scale invasion. Millions flee. Air raid sirens replace traffic noise. The satellite begins to record something it has never seen before.",
 
     "2023":
-        "The result was a sharp drop in Kyiv's satellite light, not because people left, but because the power simply wasn't there.",
+        "Systematic attacks on Ukraine's energy infrastructure plunge Kyiv into rolling blackouts. At times, the city receives only four hours of electricity per day. The darkness is visible from space.",
 
     "2024":
-        "Rolling blackouts, candlelit apartments, and city-run charging stations became part of daily life.",
+        "Ukraine's grid engineers work around the clock to restore power. Distributed generation and international support begin to stabilise supply. The lights slowly return.",
 
     "2025":
-        "Rolling blackouts, candlelit apartments, and city-run charging stations became part of daily life."
+        "Kyiv endures. The radiance curve — scarred by war, dimmed by blackouts, climbing toward recovery — is one of the most extraordinary records in the history of nighttime satellite observation."
 
 };
 

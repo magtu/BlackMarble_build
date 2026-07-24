@@ -805,6 +805,12 @@ font-size: 11px;
     width:min(420px,100%);
 
 }
+
+#storyTextKyiv{
+
+    width:min(420px,100%);
+
+}
 .storyTextPermianSecond {
     font-family: 'Lora', serif;
     width: min(420px, 100%);

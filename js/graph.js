@@ -153,9 +153,9 @@ const kyivSvg = d3
 const kyivEvents = [
 
     {
-        index: 1,
-        title: "Euromaidan",
-        text: "Euromaidan — political revolution reshapes Ukraine"
+        index: 8,
+        title: "Grid under attack",
+        text: "Russia's invasion brings repeated, deliberate strikes on Ukraine's power grid"
     },
 
     {
